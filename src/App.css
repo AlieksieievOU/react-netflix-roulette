@@ -1,0 +1,12 @@
+.App {
+  text-align: center;
+}
+
+.genreSelectContainer span {
+  display: inline-block;
+  margin: 0 5px;
+}
+
+.genreSelectContainer span.active {
+  font-weight: bold;
+}
