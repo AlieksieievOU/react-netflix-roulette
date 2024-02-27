@@ -1,7 +1,15 @@
 import React from 'react';
 const title = 'Counter';
+const action = {
+    Increase : 'increase',
+    Decrease : 'decrease'
+};
+const labels = {
+    Increase : 'Increase',
+    Decrease : 'Decrease'
+};
 
-export class Counter extends React.Component {
+class Counter extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
@@ -10,7 +18,7 @@ export class Counter extends React.Component {
     }
 
     operateCounter(action) {
-        this.setState((prevState) => ({ counter: action === 'increase' ? prevState.counter + 1 : prevState.counter - 1 }));
+        this.setState((prevState) => ({ counter: action === action.Increase ? prevState.counter + 1 : prevState.counter - 1 }));
     }
 
     render() {
@@ -35,19 +43,21 @@ export class Counter extends React.Component {
                     'button',
                     {
                       className: 'increaseButton',
-                      onClick: () => this.operateCounter('increase')
+                      onClick: () => this.operateCounter(action.Increase)
                     },
-                     'Increase'
+                    labels.Increase
                 ),
                 React.createElement(
                     'button',
                     {
                       className: 'decreaseButton',
-                      onClick: () => this.operateCounter('decrease')
+                      onClick: () => this.operateCounter(action.Decrease)
                     },
-                    'Decrease'
+                    labels.Decrease
                 )
             ),
         )
     }
 }
+
+ export default Counter;

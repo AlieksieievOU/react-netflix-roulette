@@ -2,7 +2,7 @@ import React from 'react';
 const title = 'Search Form';
 const inputPlaceholder = 'What do you want to watch';
 
-export class SearchForm extends React.Component {
+class SearchForm extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
@@ -41,9 +41,11 @@ export class SearchForm extends React.Component {
                      onKeyDown={this.handleKeyDown} 
                      value={this.state.searchQuery} 
                      onChange={this.handleInputChange} />         
-                    <button type="submit"value="Submit" >Search</button>
+                    <button type="submit" value="Submit" >Search</button>
                 </form>
             </div>
         );
     }
 }
+
+export default SearchForm;

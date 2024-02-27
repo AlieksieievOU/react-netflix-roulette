@@ -1,20 +1,20 @@
 import React from 'react';
 const title = 'Genre Selector';
 
-export class GenreSelector extends React.Component {
+class GenreSelector extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            selected: parseInt(props.selectedGenre),
+            selected: parseInt(props.defaultSelectedGenre),
             genreList: props.genreList
         };
     }
 
     selectGenre(genre){
-        let state = {...genre};
-        state.selected = genre.id;
-        this.setState(state);
-        this.props.onSelectGenre(genre)
+        const _self = this;
+        _self.state.selected = genre.id;
+        _self.setState(_self.state);
+        _self.props.onSelectGenre(genre)
     }
 
     render() {
@@ -33,3 +33,5 @@ export class GenreSelector extends React.Component {
         );
     }
 }
+
+export default GenreSelector;
