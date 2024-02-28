@@ -1,4 +1,5 @@
 import React from 'react';
+import classNames from 'classnames';
 const title = 'Genre Selector';
 
 class GenreSelector extends React.Component {
@@ -15,7 +16,7 @@ class GenreSelector extends React.Component {
         _self.state.selected = genre.id;
         _self.setState(_self.state);
         _self.props.onSelectGenre(genre)
-    }
+    };
 
     render() {
         return (
@@ -23,8 +24,9 @@ class GenreSelector extends React.Component {
                 <h2>{title}</h2>
                 <div>
                     {this.state.genreList.map(
-                        (genre) => <span 
-                        className={`${genre.id === this.state.selected ? "active" : ""}`} 
+                        (genre) => <span
+                         className={classNames({ active: genre.id === this.state.selected })}
+
                         onClick={()=>this.selectGenre(genre)} 
                         key={genre.id}>{genre.name}</span>
                     )}
