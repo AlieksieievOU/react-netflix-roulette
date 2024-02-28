@@ -12,10 +12,13 @@ class GenreSelector extends React.Component {
     }
 
     selectGenre(genre){
-        const _self = this;
-        _self.state.selected = genre.id;
-        _self.setState(_self.state);
-        _self.props.onSelectGenre(genre)
+        this.setState(function (prevState) {
+            return {
+                ...prevState,
+                selected: genre.id
+            }
+        });
+        this.props.onSelectGenre(genre)
     };
 
     render() {
