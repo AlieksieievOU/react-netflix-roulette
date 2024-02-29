@@ -27,8 +27,8 @@ class GenreSelector extends React.Component {
                 <h2>{title}</h2>
                 <div>
                     {this.state.genreList.map(
-                        (genre) => <span
-                         className={classNames({ active: genre.id === this.state.selected })}
+                        (genre) => <span data-testid="genre" id={genre.id}
+                                         className={classNames({ active: genre.id === this.state.selected })}
 
                         onClick={()=>this.selectGenre(genre)} 
                         key={genre.id}>{genre.name}</span>
