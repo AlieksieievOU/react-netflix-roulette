@@ -36,6 +36,7 @@ class SearchForm extends React.Component {
                  <h2>{title}</h2>
                 <form onSubmit={this.handleButtonClicked}>
                     <input placeholder={inputPlaceholder}
+                           role="searchbox"
                      type="text" 
                      onFocus={this.handleOnFocus} 
                      onKeyDown={this.handleKeyDown} 

@@ -1,12 +1,13 @@
 import React from 'react';
+
 const title = 'Counter';
-const action = {
-    Increase : 'increase',
-    Decrease : 'decrease'
+const buttonAction = {
+    Increase: 'increase',
+    Decrease: 'decrease'
 };
 const labels = {
-    Increase : 'Increase',
-    Decrease : 'Decrease'
+    Increase: 'Increase',
+    Decrease: 'Decrease'
 };
 
 class Counter extends React.Component {
@@ -18,46 +19,46 @@ class Counter extends React.Component {
     }
 
     operateCounter(action) {
-        this.setState((prevState) => ({ counter: action === action.Increase ? prevState.counter + 1 : prevState.counter - 1 }));
+        this.setState((prevState) => ({counter: action === buttonAction.Increase ? prevState.counter + 1 : prevState.counter - 1}));
     }
 
     render() {
         return React.createElement(
             'div',
-            { className: 'counterContainer' },
+            {className: 'counterContainer'},
             React.createElement(
                 'h2',
-                     { className: 'counterTitle' },
+                {className: 'counterTitle'},
                 title,
             ),
             React.createElement(
                 'div',
-                    { className: 'counterBody' },
+                {className: 'counterBody'},
 
                 React.createElement(
                     'p',
-                    { className: 'counterLabel' },
+                    {className: 'counterLabel'},
                     this.state.counter
                 ),
                 React.createElement(
                     'button',
                     {
-                      className: 'increaseButton',
-                      onClick: () => this.operateCounter(action.Increase)
+                        className: 'increaseButton',
+                        onClick: () => this.operateCounter(buttonAction.Increase)
                     },
                     labels.Increase
                 ),
                 React.createElement(
                     'button',
                     {
-                      className: 'decreaseButton',
-                      onClick: () => this.operateCounter(action.Decrease)
+                        className: 'decreaseButton',
+                        onClick: () => this.operateCounter(buttonAction.Decrease)
                     },
                     labels.Decrease
                 )
-            ),
+            )
         )
     }
 }
 
- export default Counter;
+export default Counter;
