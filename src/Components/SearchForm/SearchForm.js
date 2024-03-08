@@ -1,5 +1,7 @@
 import React from 'react';
-const title = 'Search Form';
+import styles from './SearchForm.module.scss';
+
+const title = 'FIND YOUR MOViE';
 const inputPlaceholder = 'What do you want to watch';
 
 class SearchForm extends React.Component {
@@ -32,8 +34,8 @@ class SearchForm extends React.Component {
 
     render() {
         return (
-            <div className='searchFormContainer'>
-                 <h2>{title}</h2>
+            <div className={styles.searchFormContainer}>
+                 <h2 >{title}</h2>
                 <form onSubmit={this.handleButtonClicked}>
                     <input placeholder={inputPlaceholder}
                            role="searchbox"

@@ -1,0 +1,20 @@
+.MovieAddWrapper {
+  width: 177px;
+  height: 46px;
+  font-style: normal;
+  font-weight: 600;
+  font-size: 20px;
+  text-transform: uppercase;
+  color: #F65261;
+  background: rgba(96, 96, 96, 0.68);
+  border-radius: 4px;
+  text-align: center;
+  line-height: 46px;
+  cursor: pointer;
+  float: right;
+  transition: all .3s ease-in;
+
+  &:hover {
+    background: rgba(96, 96, 96, 1);
+  }
+}

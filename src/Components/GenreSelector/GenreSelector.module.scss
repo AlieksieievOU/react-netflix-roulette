@@ -1,0 +1,29 @@
+.genreSelectContainer {
+   flex: 1;
+   div.genreWrapper {
+      span {
+         display: inline-block;
+         margin: 0;
+         float: left ;
+         padding-bottom: 20px;
+         font-style: normal;
+         font-size: 16px;
+         line-height: 20px;
+         color: #FFFFFF;
+         border-bottom: solid 4px transparent;
+         transition: all .3s ease-in;
+         cursor: pointer;
+
+         &.active {
+            position: relative;
+            border-bottom-color: rgba(246, 82, 97, 1);
+            z-index: 2;
+         }
+
+         & + span {
+            margin-left: 30px;
+         }
+      }
+   }
+}
+
