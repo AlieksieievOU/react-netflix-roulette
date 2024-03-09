@@ -15,7 +15,7 @@ const ColorPalette = () => {
             <h2 className={styles.asideHeader} >Color Palette</h2>
             <ul>
                 {colorPaletteArray.map(
-                    (item, index) => <li key={index}><span  data-testid="color" style={{backgroundColor:"#"+item.color}}></span> <span>{item.color}</span></li>
+                    (item, index) => <li key={index}><span  data-testid="color" id={item.color} style={{backgroundColor:"#"+item.color}}></span> <span>{item.color}</span></li>
                 )}
             </ul>
         </div>
