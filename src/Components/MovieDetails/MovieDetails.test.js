@@ -2,15 +2,16 @@ import React from 'react';
 import { render, screen } from '@testing-library/react';
 import MovieDetails from './MovieDetails';
 
-const mockMovie = {
-    imageUrl: 'https://example.com/movie.jpg',
-    name: 'The Enthralling Adventure',
-    imdbRating: 8.7,
-    genres: ['Action'],
-    releaseYear: 2023,
-    duration: '1h 45min',
-    description: 'A captivating story filled with thrills and excitement.',
+const mockMovie =  {
+    name: "The Shawshank Redemption",
+    releaseYear: "1994",
+    imdbRating: "9.3",
+    genres: "Drama",
+    duration: "142 min",
+    description: "Two imprisoned men bond over a number of years",
+    imageUrl: "https://m.media-amazon.com/images/M/MV5BMDFkYTc0MGEtZmNhMC00ZDIzLWFmNTEtODM1ZmRlYWMwMWFmXkEyXkFqcGdeQXVyMTMxODk2OTU@._V1_SX300.jpg",
 };
+
 describe('MovieDetails component', () => {
     it('renders movie details when a movie is provided', () => {
         render(<MovieDetails selectedMovie={mockMovie} />);
@@ -20,9 +21,7 @@ describe('MovieDetails component', () => {
         expect(screen.getByText(mockMovie.releaseYear)).toBeInTheDocument();
         expect(screen.getByText(mockMovie.duration)).toBeInTheDocument();
         expect(screen.getByText(mockMovie.description)).toBeInTheDocument();
-        expect(screen.getByRole('imgPoster')).toBeInTheDocument();
-
-        const image = screen.getByRole('imgPoster');
+        const image = screen.getByTestId('imgPoster');
         expect(image).toBeInTheDocument();
         expect(image).toHaveAttribute('alt', 'imgPoster');
     });

@@ -20,14 +20,14 @@ const MovieTile = (props) => {
     return (
         <div className={styles.movietile} onClick={handleTileClick} role='movie-tile'>
             <div className={styles.movietileImage}>
-                <img src={movie.imageUrl} alt={movie.name}/>
+                <img src={movie?.imageUrl} alt={movie?.name}/>
                 <button role="showMenuButton" className={styles.menuButton} onClick={() => setShowMenu(true)}></button>
             </div>
 
             <div className={styles.info}>
-                <div className={styles.infoRow}><h3 className={styles.headerH3}>{movie.name}</h3> <span
-                    className={'release-year'}>{movie.releaseYear}</span></div>
-                <div className={styles.genres}><span>{movie.genres}</span></div>
+                <div className={styles.infoRow}><h3 className={styles.headerH3}>{movie?.name}</h3> <span
+                    className={'release-year'}>{movie?.releaseYear}</span></div>
+                <div className={styles.genres}><span>{movie?.genres}</span></div>
             </div>
 
             {showMenu && (

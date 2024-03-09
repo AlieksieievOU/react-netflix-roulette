@@ -12,7 +12,7 @@ const colorPaletteArray = [
 const ColorPalette = () => {
     return (
         <div className={styles.ColorPaletteWrapper}>
-            <h2 className={styles.asideHeader} role="heading">Color Palette</h2>
+            <h2 className={styles.asideHeader} >Color Palette</h2>
             <ul>
                 {colorPaletteArray.map(
                     (item, index) => <li key={index}><span  data-testid="color" style={{backgroundColor:"#"+item.color}}></span> <span>{item.color}</span></li>

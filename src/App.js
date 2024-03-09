@@ -1,4 +1,4 @@
-import React, {useState, useContext} from "react";
+import React, {useState} from "react";
 import './App.scss';
 import GenreSelector from './Components/GenreSelector/GenreSelector';
 import SortControl from './Components/SortControl/SortControl';
@@ -11,7 +11,7 @@ import MovieDetails from "./Components/MovieDetails/MovieDetails";
 import {GenreListArray, SortControlArray, movieTilesArray} from './data';
 
 export function SwitchComponents({ active, children }) {
-    return children.filter(child => child.props.name == active)
+    return children.filter(child => child.props.name === active)
 }
 
 function App() {

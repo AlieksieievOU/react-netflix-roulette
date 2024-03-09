@@ -12,8 +12,8 @@ describe('SortControl component', () => {
 
         render(<SortControl SortControl={sortList} defaultSelectedSortControl={1} />);
 
-        expect(screen.getByRole('label')).toHaveTextContent('Sort by');
-        expect(screen.getByRole('select')).toBeInTheDocument();
+        expect(screen.getByTestId('SortControlSelectLabel')).toHaveTextContent('Sort by');
+        expect(screen.getByTestId('sortControl')).toBeInTheDocument();
         expect(screen.getByTestId('triangle')).toBeInTheDocument();
     });
 
@@ -25,7 +25,7 @@ describe('SortControl component', () => {
 
         render(<SortControl SortControl={sortList} defaultSelectedSortControl={1} />);
 
-        const select = screen.getByRole('select');
+        const select = screen.getByTestId('sortControl');
         expect(select.value).toBe('1');
 
         fireEvent.change(select, { target: { value: '2' } });

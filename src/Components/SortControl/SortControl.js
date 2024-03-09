@@ -15,8 +15,8 @@ const SortControl = (props) => {
 
     return (
         <div className={styles.SortControlWrapper}>
-            <label htmlFor="SortControlSelect" role="label">{labelTitle}</label>
-            <select role="select" name="sortBy" id="sortControl" value={selected} onChange={(e) => handleChange(e)}>
+            <label  data-testid="SortControlSelectLabel" htmlFor="SortControlSelect">{labelTitle}</label>
+            <select data-testid="sortControl" name="sortBy" id="sortControl" value={selected} onChange={(e) => handleChange(e)}>
                 {sortList.map(option => <option key={option.id} value={option.id}>{option.name}</option>)}
             </select>
             <div data-testid="triangle" className={styles.triangle}></div>
