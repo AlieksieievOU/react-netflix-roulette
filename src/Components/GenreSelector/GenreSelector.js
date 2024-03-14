@@ -1,7 +1,7 @@
 import React from 'react';
 import classNames from 'classnames';
-const title = 'Genre Selector';
-
+import styles from './GenreSelector.module.scss';
+let cx = classNames.bind(styles);
 class GenreSelector extends React.Component {
     constructor(props) {
         super(props);
@@ -23,12 +23,11 @@ class GenreSelector extends React.Component {
 
     render() {
         return (
-            <div className='genreSelectContainer'>
-                <h2>{title}</h2>
-                <div>
+            <div className={styles.genreSelectContainer}>
+                <div className={styles.genreWrapper}>
                     {this.state.genreList.map(
                         (genre) => <span data-testid="genre" id={genre.id}
-                                         className={classNames({ active: genre.id === this.state.selected })}
+                                         className={cx({ [styles.active] : genre.id === this.state.selected })}
 
                         onClick={()=>this.selectGenre(genre)} 
                         key={genre.id}>{genre.name}</span>

@@ -1,6 +1,6 @@
 import React from 'react';
+import styles from './Counter.module.scss';
 
-const title = 'Counter';
 const buttonAction = {
     Increase: 'increase',
     Decrease: 'decrease'
@@ -25,12 +25,7 @@ class Counter extends React.Component {
     render() {
         return React.createElement(
             'div',
-            {className: 'counterContainer'},
-            React.createElement(
-                'h2',
-                {className: 'counterTitle'},
-                title,
-            ),
+            {className: styles.counterContainer},
             React.createElement(
                 'div',
                 {className: 'counterBody'},
