@@ -2,10 +2,11 @@ import Dialog from '../Components/Dialog/Dialog';
 import MovieForm from '../Components/MovieForm/MovieForm';
 import MovieDelete from "../Components/MovieDelete/MovieDelete";
 import React from "react";
+
 export default {
     title: 'Components / Dialog',
     component: Dialog,
-    subcomponents: {MovieDelete}
+    subcomponents: {MovieForm, MovieDelete}
 }
 
 let showModal = false;
@@ -27,7 +28,7 @@ const onClose = () => {
 export const AddMovie = {
     render: (args) => (
         <Dialog {...args}>
-            <MovieForm name="movie-form" formContent={mockFormContent} action={'add'} />
+            <MovieForm name="movie-form" formContent={mockFormContent} action={'add'}/>
         </Dialog>
     ),
 };
@@ -40,7 +41,7 @@ AddMovie.args = {
 export const EditMovie = {
     render: (args) => (
         <Dialog {...args}>
-            <MovieForm name="movie-form" formContent={mockFormContent} action={'edit'} />
+            <MovieForm name="movie-form" formContent={mockFormContent} action={'edit'}/>
         </Dialog>
     ),
 };
@@ -51,9 +52,9 @@ EditMovie.args = {
 };
 
 export const DeleteMovie = {
-    render: ({args}) => (
+    render: (args) => (
         <Dialog {...args}>
-            <MovieDelete name="movie-delete" formContent={mockFormContent} action={'delete'} />
+            <MovieDelete name="movie-delete" formContent={mockFormContent} action={'delete'}/>
         </Dialog>
     ),
 };
