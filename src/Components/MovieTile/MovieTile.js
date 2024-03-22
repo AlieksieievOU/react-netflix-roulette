@@ -1,19 +1,35 @@
-import React, {useState, useContext} from "react";
+import React, {useState} from "react";
+import MovieForm from '../MovieForm/MovieForm';
+import MovieDelete from "../MovieDelete/MovieDelete";
+import SwitchComponents from "../SwitchComponents/SwitchComponents";
+import Dialog from "../Dialog/Dialog";
 import styles from './MovieTile.module.scss';
 
-//const MenuContext = React.createContext();
 const MovieTile = (props) => {
     const [showMenu, setShowMenu] = useState(false);
     const movie = props.movieTileItem;
-    //  const { handleMenuAction } = useContext(MenuContext);
+    const [showModal, setShowModal] = useState(false);
+    const [action, setAction] = useState('edit');
+    const [activeComponent, setActiveComponent] = useState("movie-form");
 
     const handleMenuClick = (action) => {
-        //    setShowMenu(false);
-        //      handleMenuAction(action, movie);
+        setAction(action);
+
+        if (action === 'delete') {
+            setActiveComponent('movie-delete');
+        } else {
+            setActiveComponent('movie-form');
+        }
+
+        setShowMenu(false);
+        setShowModal(true);
     };
 
+    const menuButtonClose = styles.menuButtonClose;
+    const subMenu = styles.subMenu;
+
     const handleTileClick = (event) => {
-        if (event.target.closest(".menuButton")) return;
+        if (event.nativeEvent.srcElement.className === subMenu || event.nativeEvent.srcElement.className === menuButtonClose) return;
         props.onSelectMovieTile(movie);
     };
 
@@ -31,14 +47,22 @@ const MovieTile = (props) => {
             </div>
 
             {showMenu && (
-                <div className={styles.subMenu} role="subMenu">
-                    <button role="hideMenuButton" className={styles.menuButtonClose} onClick={() => setShowMenu(false)}></button>
+                <div className={subMenu} role="subMenu">
+                    <button role="hideMenuButton" className={menuButtonClose}
+                            onClick={() => setShowMenu(false)}></button>
                     <ul className={styles.menuList}>
                         <li onClick={() => handleMenuClick("edit")}>Edit</li>
                         <li onClick={() => handleMenuClick("delete")}>Delete</li>
                     </ul>
                 </div>
             )}
+
+                <Dialog showModal={showModal} onClose={() => setShowModal(false)}>
+                    <SwitchComponents active={activeComponent} formContent={movie} action={action}>
+                      <MovieForm name="movie-form" formContent={movie} action={action} />
+                      <MovieDelete name="movie-delete" formContent={movie} action={action} />
+                    </SwitchComponents>
+                </Dialog>
         </div>
     );
 }

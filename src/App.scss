@@ -16,11 +16,12 @@ ul {
 }
 
 .App {
-  padding: 58px 0;
-  margin: 0 auto;
-  max-width: 1600px;
+  padding: 0;
+  margin: 58px auto;
+  max-width: 1200px;
   display: flex;
   gap: 30px;
+  position: relative;
 }
 
 main {

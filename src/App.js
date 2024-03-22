@@ -2,17 +2,15 @@ import React, {useState} from "react";
 import './App.scss';
 import GenreSelector from './Components/GenreSelector/GenreSelector';
 import SortControl from './Components/SortControl/SortControl';
-import ColorPalette from './Components/ColorPalette/ColorPalette';
 import MoviesFound from './Components/MoviesFound/MoviesFound';
 import MovieTile from './Components/MovieTile/MovieTile';
 import Logo from './Components/Logo/Logo';
 import Header from './Components/Header/Header';
 import MovieDetails from "./Components/MovieDetails/MovieDetails";
+import SwitchComponents from "./Components/SwitchComponents/SwitchComponents";
 import {GenreListArray, SortControlArray, movieTilesArray} from './data';
 
-export function SwitchComponents({ active, children }) {
-    return children.filter(child => child.props.name === active)
-}
+
 
 function App() {
     const [activeComponent, setActiveComponent] = useState("header");
@@ -32,7 +30,7 @@ function App() {
     }
 
     return (
-        <div className="App">
+        <div className="App" id='js-app'>
             <div className="left-column">
                 <SwitchComponents active={activeComponent}>
                     <Header name="header" />
@@ -58,9 +56,6 @@ function App() {
                     <Logo/>
                 </footer>
             </div>
-            <aside>
-                <ColorPalette/>
-            </aside>
         </div>
     );
 }

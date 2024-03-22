@@ -78,6 +78,7 @@
 .menuList {
   list-style-type: none;
   margin-top: 30px;
+
   li {
     font-style: normal;
     font-weight: 400;
@@ -106,12 +107,14 @@
   display: flex;
   flex-direction: row;
   padding-top: 20px;
+
   h3 {
-     flex: 1;
+    flex: 1;
     padding: 0;
     margin: 0;
     line-height: 26px;
   }
+
   h3 + span {
     mix-blend-mode: normal;
     opacity: 0.5;
@@ -133,7 +136,6 @@
   letter-spacing: 0px;
   text-align: left;
   color: rgba(255, 255, 255, .5);
-
 }
 
 
