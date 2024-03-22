@@ -54,6 +54,7 @@
     "@storybook/react-webpack5": "^7.6.17",
     "@storybook/test": "^7.6.17",
     "cypress": "^13.6.6",
+    "eslint-plugin-react-hooks": "^4.6.0",
     "eslint-plugin-storybook": "^0.8.0",
     "normalize.css": "^8.0.1",
     "prop-types": "^15.8.1",

@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React from 'react';
 import styles from './MovieDetails.module.scss';
 import Logo from "../Logo/Logo";
 
@@ -7,21 +7,21 @@ function MovieDetails(props) {
 
     return (
         <header className={styles.movieHeader}>
-        <div className="topWrapper">
+        <div className={styles.topWrapper}>
             <Logo/>
             <div className={styles.searchButton} onClick={() => props.setActiveComponent('header')}></div>
         </div>
 
         <div className={styles.movieInfoPanel}>
-            <div className={styles.movieInfoImg}><img data-testid="imgPoster" src={selectedMovieTitle?.imageUrl} alt="imgPoster"/></div>
+            <div className={styles.movieInfoImg}><img data-testid="imgPoster" onError={(e) => e.target.src = 'https://placehold.co/319x450'} src={selectedMovieTitle?.poster_path} alt="imgPoster"/></div>
             <div>
-                <div className={styles.nameRow}>{selectedMovieTitle?.name} <span>{selectedMovieTitle?.imdbRating}</span></div>
-                <div className={styles.genres}>{selectedMovieTitle?.genres}</div>
+                <div className={styles.nameRow}>{selectedMovieTitle?.title} <span>{selectedMovieTitle?.vote_average}</span></div>
+                <div className={styles.genres}>{selectedMovieTitle?.genres.join(', ')}</div>
                 <div className={styles.releaseDurationRow}>
-                    <span>{selectedMovieTitle?.releaseYear}</span>
-                    <span>{selectedMovieTitle?.duration}</span>
+                    <span>{selectedMovieTitle?.release_date.split('-')[0]}</span>
+                    <span>{selectedMovieTitle?.runtime + ' min'}</span>
                 </div>
-                <div className={styles.description}>{selectedMovieTitle?.description}</div>
+                <div className={styles.description}>{selectedMovieTitle?.overview}</div>
             </div>
         </div>
     </header>

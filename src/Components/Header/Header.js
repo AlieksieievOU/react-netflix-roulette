@@ -1,21 +1,18 @@
 import React from 'react';
+import styles from './Header.module.scss';
 import Logo from "../Logo/Logo";
 import MovieAdd from "../MovieAdd/MovieAdd";
 import SearchForm from "../SearchForm/SearchForm";
 import Counter from "../Counter/Counter";
 
 const Header = (props) => {
-    const onSearch = function (input) {
-        console.log(input);
-    }
-
     return (
         <header data-testid="header">
-            <div className="topWrapper">
+            <div className={styles.topWrapper}>
                 <Logo/>
                 <MovieAdd/>
             </div>
-            <SearchForm onSearch={onSearch} searchQuery='crime'/>
+            <SearchForm onSearch={props.onSearch} searchQuery={props.searchQuery}/>
             <Counter initialValue={0}/>
         </header>
     );
