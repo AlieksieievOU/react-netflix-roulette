@@ -12,7 +12,8 @@ const MovieTile = (props) => {
     const [action, setAction] = useState('edit');
     const [activeComponent, setActiveComponent] = useState("movie-form");
 
-    const handleMenuClick = (action) => {
+    const handleMenuClick = (event , action) => {
+        event.stopPropagation();
         setAction(action);
 
         if (action === 'delete') {
@@ -28,22 +29,27 @@ const MovieTile = (props) => {
     const menuButtonClose = styles.menuButtonClose;
     const subMenu = styles.subMenu;
 
-    const handleTileClick = (event) => {
-        if (event.nativeEvent.srcElement.className === subMenu || event.nativeEvent.srcElement.className === menuButtonClose) return;
+    const handleTileClick = () => {
         props.onSelectMovieTile(movie);
     };
+
+    const openMenu = (event) => {
+        event.stopPropagation();
+        setShowMenu(true);
+    }
 
     return (
         <div className={styles.movietile} onClick={handleTileClick} role='movie-tile'>
             <div className={styles.movietileImage}>
-                <img src={movie?.imageUrl} alt={movie?.name}/>
-                <button role="showMenuButton" className={styles.menuButton} onClick={() => setShowMenu(true)}></button>
+                <img src={movie?.poster_path} alt={movie?.title} onError={(e) => e.target.src = 'https://placehold.co/319x450'}/>
+                <button role="showMenuButton" className={styles.menuButton} onClick={(event) => openMenu(event)}></button>
             </div>
 
             <div className={styles.info}>
-                <div className={styles.infoRow}><h3 className={styles.headerH3}>{movie?.name}</h3> <span
-                    className={'release-year'}>{movie?.releaseYear}</span></div>
-                <div className={styles.genres}><span>{movie?.genres}</span></div>
+                <div className={styles.infoRow}><h3 className={styles.headerH3}>{movie?.title}</h3>
+                    <span
+                    className={'release-year'}>{movie?.release_date.split('-')[0]}</span></div>
+                <div className={styles.genres}><span>{movie?.genres.join(', ')}</span></div>
             </div>
 
             {showMenu && (
@@ -51,8 +57,8 @@ const MovieTile = (props) => {
                     <button role="hideMenuButton" className={menuButtonClose}
                             onClick={() => setShowMenu(false)}></button>
                     <ul className={styles.menuList}>
-                        <li onClick={() => handleMenuClick("edit")}>Edit</li>
-                        <li onClick={() => handleMenuClick("delete")}>Delete</li>
+                        <li onClick={(event) => handleMenuClick(event,"edit")}>Edit</li>
+                        <li onClick={(event) => handleMenuClick(event,"delete")}>Delete</li>
                     </ul>
                 </div>
             )}

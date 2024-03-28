@@ -10,6 +10,7 @@ const SortControl = (props) => {
     function handleChange (e) {
         if (e.target.value !== selected) {
             setSelected(e.target.value);
+            props.onSortControl(e.target.value)
         }
     }
 

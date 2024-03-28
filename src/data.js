@@ -1,9 +1,10 @@
 export const GenreListArray = [
     {id: 0, name: 'all'},
-    {id: 1, name: 'documentary'},
+    {id: 1, name: 'action'},
     {id: 2, name: 'comedy'},
-    {id: 3, name: 'horror'},
-    {id: 4, name: 'crime'}
+    {id: 3, name: 'science fiction'},
+    {id: 4, name: 'crime'},
+    {id: 5, name: 'adventure'}
 ];
 
 export const SortControlArray = [
