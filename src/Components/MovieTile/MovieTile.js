@@ -4,13 +4,15 @@ import MovieDelete from "../MovieDelete/MovieDelete";
 import SwitchComponents from "../SwitchComponents/SwitchComponents";
 import Dialog from "../Dialog/Dialog";
 import styles from './MovieTile.module.scss';
-
+import { useNavigate } from 'react-router-dom';
 const MovieTile = (props) => {
+
     const [showMenu, setShowMenu] = useState(false);
     const movie = props.movieTileItem;
     const [showModal, setShowModal] = useState(false);
     const [action, setAction] = useState('edit');
     const [activeComponent, setActiveComponent] = useState("movie-form");
+    const navigate = useNavigate();
 
     const handleMenuClick = (event , action) => {
         event.stopPropagation();
@@ -30,7 +32,7 @@ const MovieTile = (props) => {
     const subMenu = styles.subMenu;
 
     const handleTileClick = () => {
-        props.onSelectMovieTile(movie);
+        navigate(`/${movie.id}`);
     };
 
     const openMenu = (event) => {

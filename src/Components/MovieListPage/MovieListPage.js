@@ -5,9 +5,7 @@ import SortControl from '../SortControl/SortControl';
 import MoviesFound from '../MoviesFound/MoviesFound';
 import MovieTile from '../MovieTile/MovieTile';
 import Logo from '../Logo/Logo';
-import Header from '../Header/Header';
-import MovieDetails from "../MovieDetails/MovieDetails";
-import SwitchComponents from "../SwitchComponents/SwitchComponents";
+import { Outlet, BrowserRouter, Routes, Route } from 'react-router-dom';
 import {GenreListArray, SortControlArray} from '../../data';
 
 const MovieListPage = () => {
@@ -92,11 +90,12 @@ const MovieListPage = () => {
     return (
         <>
             <div className="left-column">
-                <SwitchComponents active={activeComponent}>
-                    <Header name="header" onSearch={onSearch} searchQuery={searchQuery}/>
-                    <MovieDetails name="movie-details" selectedMovie={selectedMovie}
-                                  setActiveComponent={setActiveComponent}/>
-                </SwitchComponents>
+            <Outlet/>
+                {/*<SwitchComponents active={activeComponent}>*/}
+                {/*    <Header name="header" onSearch={onSearch} searchQuery={searchQuery}/>*/}
+                {/*    <MovieDetails name="movie-details" selectedMovie={selectedMovie}*/}
+                {/*                  setActiveComponent={setActiveComponent}/>*/}
+                {/*</SwitchComponents>*/}
                 <main>
                     <nav>
                         <GenreSelector defaultSelectedGenre={0} genreList={GenreListArray}
