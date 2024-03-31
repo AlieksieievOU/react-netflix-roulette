@@ -35,7 +35,7 @@ const SearchForm = () => {
     },[]);
 
     return (
-        <div className={styles.searchFormContainer}>
+        <div className={styles.searchFormContainer} data-testid="search-container">
             <h2>{title}</h2>
             <form onSubmit={handleFormSubmit}>
                 <input

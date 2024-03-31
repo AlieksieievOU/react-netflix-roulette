@@ -45,4 +45,18 @@ context('E2E Test of MovieListPage Component', () => {
         cy.location('search').should('include', 'search=zoo');
         cy.get('[data-testid="movie-tile"]').should('have.length.greaterThan', 1);
     });
+
+    it('should show movie page by clicking on movie tile', () => {
+        cy.get('[data-testid="movie-tile"]').first().click();
+        cy.wait(1000);
+        cy.location('href').should('include', `/movie/`);
+        cy.get('[data-testid="movie-details"]').should('be.visible');
+    });
+
+    it('should return to search by clicking on search button', () => {
+        cy.get('[data-testid="search-button"]').first().click();
+        cy.wait(1000);
+        cy.location('href').should('not.include', '/movie');
+        cy.get('[data-testid="search-container"]').should('be.visible');
+    });
 });

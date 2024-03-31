@@ -68,10 +68,10 @@ function MovieDetails() {
         <header className={styles.movieHeader}>
             <div className={styles.topWrapper}>
                 <Logo/>
-                <div className={styles.searchButton} onClick={searchButtonClick}></div>
+                <div data-testid="search-button" className={styles.searchButton} onClick={searchButtonClick}></div>
             </div>
 
-            <div className={styles.movieInfoPanel}>
+            <div data-testid="movie-details" className={styles.movieInfoPanel}>
                 <div className={styles.movieInfoImg}><img data-testid="imgPoster"
                                                           onError={(e) => e.target.src = 'https://placehold.co/319x450'}
                                                           src={selectedMovie?.poster_path} alt="imgPoster"/></div>
