@@ -32,7 +32,7 @@ const MovieTile = (props) => {
     const subMenu = styles.subMenu;
 
     const handleTileClick = () => {
-        navigate(`/${movie.id}`);
+        navigate(`/movie/${movie.id}`);
     };
 
     const openMenu = (event) => {
@@ -41,7 +41,7 @@ const MovieTile = (props) => {
     }
 
     return (
-        <div className={styles.movietile} onClick={handleTileClick} role='movie-tile'>
+        <div className={styles.movietile} onClick={handleTileClick} role='movie-tile' data-testid="movie-tile">
             <div className={styles.movietileImage}>
                 <img src={movie?.poster_path} alt={movie?.title} onError={(e) => e.target.src = 'https://placehold.co/319x450'}/>
                 <button role="showMenuButton" className={styles.menuButton} onClick={(event) => openMenu(event)}></button>
@@ -51,7 +51,7 @@ const MovieTile = (props) => {
                 <div className={styles.infoRow}><h3 className={styles.headerH3}>{movie?.title}</h3>
                     <span
                     className={'release-year'}>{movie?.release_date.split('-')[0]}</span></div>
-                <div className={styles.genres}><span>{movie?.genres.join(', ')}</span></div>
+                <div className={styles.genres}><span data-testid="movie-genre">{movie?.genres.join(', ')}</span></div>
             </div>
 
             {showMenu && (

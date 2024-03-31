@@ -1,18 +1,20 @@
-import React, {useState, useEffect, useCallback, useRef} from "react";
+import React, {useState, useEffect, useCallback, useRef, createContext} from "react";
 import styles from './MovieListPage.module.scss';
 import GenreSelector from '../GenreSelector/GenreSelector';
 import SortControl from '../SortControl/SortControl';
 import MoviesFound from '../MoviesFound/MoviesFound';
 import MovieTile from '../MovieTile/MovieTile';
 import Logo from '../Logo/Logo';
-import { Outlet, BrowserRouter, Routes, Route } from 'react-router-dom';
+import {Outlet} from "react-router-dom";
 import {GenreListArray, SortControlArray} from '../../data';
 
 const url = 'http://localhost:4000/movies?';
+const SearchContext = createContext({
+    onSearch: null,
+    isLoading: null,
+});
 
 const MovieListPage = () => {
-    const [activeComponent, setActiveComponent] = useState("header");
-    const [selectedMovie, setSelectedMovie] = useState(null);
     const [searchQuery, setSearchQuery] = useState('');
     const [sortCriterion, setSortCriterion] = useState('1');
     const [activeGenre, setActiveGenre] = useState('all');
@@ -20,41 +22,19 @@ const MovieListPage = () => {
     const [movieListLength, setMovieListLength] = useState(movieList.length);
     const [isLoading, setIsLoading] = useState(false);
     const [initDone, setInitDone] = useState(false);
-    const controllerRef = useRef(null)
-    // let queryParams = new URLSearchParams();
-    // const [queryParamsState, setQueryParamsState] = useState('');
+    const controllerRef = useRef(null);
 
     const onSearch = function (input) {
-        // queryParams.set('searchBy', 'title')
-        // queryParams.set('search', input)
-        // setQueryParamsState(queryParams.toString());
         setSearchQuery(input);
     }
 
     const onSelectGenre = function (genre) {
-         setActiveGenre(genre);
-        // if (genre.id === 0) {
-        //     queryParams.delete('searchBy');
-        //     queryParams.delete('search');
-        // } else {
-        //     queryParams.set('searchBy', 'genres');
-        //     queryParams.set('search', genre.name);
-        // }
-
-        // setQueryParamsState(queryParams.toString());
+        setActiveGenre(genre);
     }
 
     const onSortControl = function (SortControl) {
-        // queryParams.set('sortBy', SortControl === '1' ? 'title' : 'release_date');
-        // setQueryParamsState(queryParams.toString());
         setSortCriterion(SortControl);
     }
-
-    const onSelectMovieTile = function (selectedMovie) {
-        setActiveComponent('movie-details');
-        setSelectedMovie(selectedMovie);
-    }
-
 
     const searchMovies = useCallback(async (queryParams = '') => {
         controllerRef.current?.abort();
@@ -68,7 +48,6 @@ const MovieListPage = () => {
         signal.addEventListener("abort", () => {
             console.log("aborted!")
         });
-
 
         try {
             const response = await fetch(url + queryParams, {
@@ -104,11 +83,11 @@ const MovieListPage = () => {
         }
 
         if (searchBy && search) {
-           if (searchBy === 'title') {
-               setSearchQuery(search)
-           } else {
-               setActiveGenre(GenreListArray.find(item => item.name === search) || GenreListArray[0])
-           }
+            if (searchBy === 'title') {
+                setSearchQuery(search)
+            } else {
+                setActiveGenre(GenreListArray.find(item => item.name === search) || GenreListArray[0])
+            }
         }
 
         setInitDone(true);
@@ -122,12 +101,12 @@ const MovieListPage = () => {
         /**
          * Getting filter / sort states and making query params
          */
-        const queryParams = new URLSearchParams();
+        const queryParams = new URLSearchParams(window.location.search);
 
-        if (searchQuery) {
-            queryParams.set('searchBy', 'title')
+        if (searchQuery !== '') {
+            queryParams.set('searchBy', 'title');
             queryParams.set('search', searchQuery)
-        } else if (activeGenre?.id && activeGenre?.id !== 0) {
+        } else if (activeGenre?.id && activeGenre?.id !== 0 && searchQuery === '') {
             queryParams.set('searchBy', 'genres');
             queryParams.set('search', activeGenre.name);
         } else {
@@ -136,24 +115,26 @@ const MovieListPage = () => {
         }
 
         queryParams.set('sortBy', sortCriterion === '1' ? 'title' : 'release_date');
+        queryParams.set('sortOrder', 'asc');
 
-        queryParams.set('sortOrder', 'asc')
-
+        let params = queryParams.toString();
 
         /**
          * Pushing query params to the browser URL
          */
         if (window.history.pushState) {
-            const newUrl = window.location.protocol + "//" + window.location.host + window.location.pathname + '?' + queryParams.toString();
-            window.history.pushState({},'', newUrl);
+            const newUrl = window.location.protocol + "//" + window.location.host + window.location.pathname + '?' + params;
+            window.history.pushState({}, '', newUrl);
         }
 
         /**
          * Calling the method to get the movies list
          */
-        searchMovies(queryParams.toString());
+        searchMovies(params);
 
-    }, [searchQuery, activeGenre, sortCriterion, searchMovies, initDone]);
+    }, [searchQuery,activeGenre, sortCriterion, searchMovies, initDone]);
+
+
 
     /**
      * We can put some loader here
@@ -163,12 +144,9 @@ const MovieListPage = () => {
     return (
         <>
             <div className="left-column">
-            <Outlet/>
-                {/*<SwitchComponents active={activeComponent}>*/}
-                {/*    <Header name="header" onSearch={onSearch} searchQuery={searchQuery}/>*/}
-                {/*    <MovieDetails name="movie-details" selectedMovie={selectedMovie}*/}
-                {/*                  setActiveComponent={setActiveComponent}/>*/}
-                {/*</SwitchComponents>*/}
+                <SearchContext.Provider value={{onSearch, isLoading}}>
+                    <Outlet/>
+                </SearchContext.Provider>
                 <main>
                     <nav>
                         <GenreSelector defaultSelectedGenre={activeGenre?.id || 0} genreList={GenreListArray}
@@ -178,9 +156,9 @@ const MovieListPage = () => {
                     </nav>
                     <section>
                         <MoviesFound defaultMoviesCount={movieListLength}/>
-                        <div className={styles.moviesFoundResults}>
+                        <div data-testid="movie-list" className={styles.moviesFoundResults}>
                             {movieList.map((movieTile, index) =>
-                                <MovieTile onSelectMovieTile={onSelectMovieTile} movieTileItem={movieTile} key={index}/>
+                                <MovieTile movieTileItem={movieTile} key={index}/>
                             )}
                         </div>
                     </section>
@@ -193,4 +171,4 @@ const MovieListPage = () => {
     );
 };
 
-export default MovieListPage;
+export {MovieListPage, SearchContext}

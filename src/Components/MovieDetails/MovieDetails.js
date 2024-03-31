@@ -1,9 +1,9 @@
-import React, {useState, useEffect, useCallback} from "react";
+import React, {useState, useEffect, useCallback, useRef} from "react";
 import styles from './MovieDetails.module.scss';
 import Logo from "../Logo/Logo";
 import {useParams, useNavigate} from "react-router-dom";
 
-function MovieDetails(props) {
+function MovieDetails() {
     const [selectedMovie, setSelectedMovie] = useState({
         name: "",
         releaseYear: "",
@@ -17,16 +17,27 @@ function MovieDetails(props) {
     const [error, setError] = useState(null);
     const {movieId} = useParams();
     const navigate = useNavigate();
+    const controllerRef = useRef(null);
+    const url = `http://localhost:4000/movies/${movieId}`;
 
-    const fetchData = async () => {
+    const fetchMovie = useCallback(async () => {
+        controllerRef.current?.abort();
+
+        setIsLoading(true);
+
+        const newController = new AbortController();
+        controllerRef.current = newController;
+        const signal = newController.signal;
+
+        signal.addEventListener("abort", () => {
+            console.log("aborted!")
+        });
+
         try {
-            const response = await fetch(`http://localhost:4000/movies/${movieId}`);
-
-            if (!response.ok) {
-                throw new Error('Failed to fetch movie details');
-            }
+            const response = await fetch(url, {
+                signal,
+            });
             const data = await response.json();
-
             setSelectedMovie({
                 title: data?.title,
                 release_date: data?.release_date.split('-')[0],
@@ -37,19 +48,20 @@ function MovieDetails(props) {
                 poster_path: data?.poster_path
             });
 
-        } catch (err) {
-            setError(err.message);
+        } catch (e) {
+            setError(e.message);
         } finally {
             setIsLoading(false);
+            controllerRef.current = null;
         }
-    };
+    }, []);
 
     const searchButtonClick = () => {
         navigate('/');
     };
 
     useEffect(() => {
-        fetchData();
+        fetchMovie();
     }, [movieId]);
 
     return (
