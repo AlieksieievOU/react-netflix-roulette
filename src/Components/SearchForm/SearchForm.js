@@ -1,54 +1,58 @@
-import React from 'react';
+import React, {useState, useContext, useEffect} from 'react';
+import {SearchContext} from '../MovieListPage/MovieListPage';
 import styles from './SearchForm.module.scss';
-
 const title = 'FIND YOUR MOViE';
 const inputPlaceholder = 'What do you want to watch';
 
-class SearchForm extends React.Component {
-    constructor(props) {
-        super(props);
-        this.state = {
-            searchQuery: props.searchQuery
-        };
-    }
+const SearchForm = () => {
+    const [searchQuery, setSearchQuery] = useState("");
+    const SearchContextValues = useContext(SearchContext);
 
-    handleInputChange = (event) => {
-        this.setState({ searchQuery: event.target.value });
+    const handleInputChange = (event) => {
+        setSearchQuery(event.target.value);
     };
 
-    handleButtonClicked = (event) => {
+    const handleFormSubmit = (event) => {
         event.preventDefault();
-        this.props.onSearch(this.state.searchQuery);
+        SearchContextValues.onSearch(searchQuery);
     };
 
-    handleKeyDown = (event) => {
+    const handleKeyDown = (event) => {
         if (event.keyCode === 13) {
             event.preventDefault();
-            this.props.onSearch(this.state.searchQuery);
+            SearchContextValues.onSearch(searchQuery);
         }
     };
 
-    handleOnFocus = (event) => {
-        this.handleButtonClicked(event);
-    };
+    useEffect(() => {
+        const queryParams = new URLSearchParams(window.location.search);
+        if (searchQuery !== '') {
+            queryParams.set('searchBy', 'title');
+        }
 
-    render() {
-        return (
-            <div className={styles.searchFormContainer}>
-                 <h2 >{title}</h2>
-                <form onSubmit={this.handleButtonClicked}>
-                    <input placeholder={inputPlaceholder}
-                           role="searchbox"
-                     type="text" 
-                     onFocus={this.handleOnFocus} 
-                     onKeyDown={this.handleKeyDown} 
-                     value={this.state.searchQuery} 
-                     onChange={this.handleInputChange} />         
-                    <button type="submit" value="Submit" >Search</button>
-                </form>
-            </div>
-        );
-    }
-}
+        setSearchQuery(queryParams.get('search') ? queryParams.get('search') : "" );
+
+    },[]);
+
+    return (
+        <div className={styles.searchFormContainer} data-testid="search-container">
+            <h2>{title}</h2>
+            <form onSubmit={handleFormSubmit}>
+                <input
+                    placeholder={inputPlaceholder}
+                    role="searchbox"
+                    type="text"
+                    onKeyDown={handleKeyDown}
+                    value={searchQuery}
+                    onChange={handleInputChange}
+                    data-testid="search-input"
+                />
+                <button data-testid="search-button" type="submit" value="Submit" disabled={SearchContextValues.isLoading}>
+                    {SearchContextValues.isLoading ? 'Searching...' : 'Search'}
+                </button>
+            </form>
+        </div>
+    );
+};
 
 export default SearchForm;

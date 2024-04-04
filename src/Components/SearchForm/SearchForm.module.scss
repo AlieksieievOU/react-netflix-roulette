@@ -49,6 +49,7 @@
       cursor: pointer;
       transition: all .3s ease-in;
 
+      &:disabled,
       &:hover {
         background: rgba(246, 82, 97, 0.68);
       }
