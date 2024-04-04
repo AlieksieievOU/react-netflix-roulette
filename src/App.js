@@ -1,9 +1,9 @@
-import React from 'react';
+import React, {StrictMode} from 'react';
 import './App.scss';
-import {MovieListPage} from './Components/MovieListPage/MovieListPage';
-import {createBrowserRouter, RouterProvider} from "react-router-dom";
+import {MovieListPage} from './pages/MovieListPage/MovieListPage';
+import {createBrowserRouter, RouterProvider, useParams} from "react-router-dom";
 import MovieDetails from "./Components/MovieDetails/MovieDetails";
-import ErrorPage from "./ErrorPage/ErrorPage";
+import ErrorPage from "./pages/ErrorPage/ErrorPage";
 import Header from "./Components/Header/Header";
 
 function App() {
@@ -17,8 +17,16 @@ function App() {
                 element: <Header/>,
             },
             {
-                path: "movie/:movieId/",
-                element: <MovieDetails/>
+                path: "movies/:movieId",
+                element: <MovieDetails/>,
+                children: [{
+                    path: "edit",
+                    element: <MovieDetails/>
+                }]
+            },
+            {
+                path: "new",
+                element: <Header/>
             }
         ],
     }]);

@@ -1,7 +1,8 @@
-import React, {useState, useEffect, useCallback, useRef} from "react";
+import React, {useState, useEffect, useCallback, useRef, useContext} from "react";
 import styles from './MovieDetails.module.scss';
 import Logo from "../Logo/Logo";
 import {useParams, useNavigate} from "react-router-dom";
+import {SearchContext} from "../../pages/MovieListPage/MovieListPage";
 
 function MovieDetails() {
     const [selectedMovie, setSelectedMovie] = useState({
@@ -13,18 +14,20 @@ function MovieDetails() {
         description: "",
         imageUrl: ""
     });
+
+    const searchContextValues = useContext(SearchContext);
     const [isLoading, setIsLoading] = useState(false);
     const [error, setError] = useState(null);
-    const {movieId} = useParams();
     const navigate = useNavigate();
     const controllerRef = useRef(null);
-    const url = `http://localhost:4000/movies/${movieId}`;
 
-    const fetchMovie = useCallback(async () => {
+
+    const fetchMovie = useCallback(async (movieId) => {
+
+        const url = `http://localhost:4000/movies/${movieId}`;
+
         controllerRef.current?.abort();
-
         setIsLoading(true);
-
         const newController = new AbortController();
         controllerRef.current = newController;
         const signal = newController.signal;
@@ -37,6 +40,7 @@ function MovieDetails() {
             const response = await fetch(url, {
                 signal,
             });
+
             const data = await response.json();
             setSelectedMovie({
                 title: data?.title,
@@ -60,8 +64,10 @@ function MovieDetails() {
         navigate('/');
     };
 
+    let { movieId } = useParams();
+
     useEffect(() => {
-        fetchMovie();
+        fetchMovie(movieId);
     }, [movieId]);
 
     return (

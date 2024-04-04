@@ -1,5 +1,5 @@
 import React, {useState, useContext, useEffect} from 'react';
-import {SearchContext} from '../MovieListPage/MovieListPage';
+import {SearchContext} from '../../pages/MovieListPage/MovieListPage';
 import styles from './SearchForm.module.scss';
 const title = 'FIND YOUR MOViE';
 const inputPlaceholder = 'What do you want to watch';

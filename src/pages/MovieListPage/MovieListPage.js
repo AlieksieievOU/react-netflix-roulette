@@ -1,17 +1,27 @@
 import React, {useState, useEffect, useCallback, useRef, createContext} from "react";
 import styles from './MovieListPage.module.scss';
-import GenreSelector from '../GenreSelector/GenreSelector';
-import SortControl from '../SortControl/SortControl';
-import MoviesFound from '../MoviesFound/MoviesFound';
-import MovieTile from '../MovieTile/MovieTile';
-import Logo from '../Logo/Logo';
-import {Outlet} from "react-router-dom";
+import GenreSelector from '../../Components/GenreSelector/GenreSelector';
+import SortControl from '../../Components/SortControl/SortControl';
+import MoviesFound from '../../Components/MoviesFound/MoviesFound';
+import MovieTile from '../../Components/MovieTile/MovieTile';
+import Logo from '../../Components/Logo/Logo';
+import {Outlet, useNavigate, useSearchParams} from "react-router-dom";
 import {GenreListArray, SortControlArray} from '../../data';
+import Dialog from "../../Components/Dialog/Dialog";
+import SwitchComponents from "../../Components/SwitchComponents/SwitchComponents";
+import MovieForm from "../../Components/MovieForm/MovieForm";
+import MovieDelete from "../../Components/MovieDelete/MovieDelete";
+import MovieSuccess from "../../Components/MovieSuccess/MovieSuccess";
 
 const url = 'http://localhost:4000/movies?';
 const SearchContext = createContext({
     onSearch: null,
     isLoading: null,
+    onSetShowModal: false,
+    onSetMovie: {},
+    onSetAction: null,
+    onSetActiveComponent: null,
+    selectedMovie: null
 });
 
 const MovieListPage = () => {
@@ -19,20 +29,39 @@ const MovieListPage = () => {
     const [sortCriterion, setSortCriterion] = useState('1');
     const [activeGenre, setActiveGenre] = useState('all');
     const [movieList, setMovieList] = useState([]);
+    const [selectedMovie, setSelectedMovie] = useState(null);
     const [movieListLength, setMovieListLength] = useState(movieList.length);
     const [isLoading, setIsLoading] = useState(false);
     const [initDone, setInitDone] = useState(false);
     const controllerRef = useRef(null);
+    const [showModal, setShowModal] = useState(false);
+    const [action, setAction] = useState('edit');
+    const [activeComponent, setActiveComponent] = useState("movie-form");
+    const navigate = useNavigate();
+    const onSetActiveComponent = (activeComponent) => {
+        setActiveComponent(activeComponent);
+    }
+    const onSetAction = (action) => {
+        setAction(action);
+    }
 
-    const onSearch = function (input) {
+    const onSetMovie = (movie) => {
+        setSelectedMovie(movie);
+    }
+
+    const onSetShowModal = (value) => {
+        setShowModal(value);
+    }
+
+    const onSearch = (input) => {
         setSearchQuery(input);
     }
 
-    const onSelectGenre = function (genre) {
+    const onSelectGenre = (genre) => {
         setActiveGenre(genre);
     }
 
-    const onSortControl = function (SortControl) {
+    const onSortControl = (SortControl) => {
         setSortCriterion(SortControl);
     }
 
@@ -70,6 +99,7 @@ const MovieListPage = () => {
      * Using setInitDone state handler to set when all the states were synced up with the URL query params
      */
     useEffect(() => {
+      //  let [searchParams, setSearchParams] = useSearchParams();
         const queryParams = new URLSearchParams(window.location.search);
 
         const sort = queryParams.get('sortBy');
@@ -101,6 +131,8 @@ const MovieListPage = () => {
         /**
          * Getting filter / sort states and making query params
          */
+
+            //  let [searchParams, setSearchParams] = useSearchParams();
         const queryParams = new URLSearchParams(window.location.search);
 
         if (searchQuery !== '') {
@@ -132,8 +164,7 @@ const MovieListPage = () => {
          */
         searchMovies(params);
 
-    }, [searchQuery,activeGenre, sortCriterion, searchMovies, initDone]);
-
+    }, [searchQuery, activeGenre, sortCriterion, searchMovies, initDone]);
 
 
     /**
@@ -143,30 +174,39 @@ const MovieListPage = () => {
 
     return (
         <>
-            <div className="left-column">
-                <SearchContext.Provider value={{onSearch, isLoading}}>
+            <SearchContext.Provider value={{onSearch, isLoading, onSetShowModal, onSetMovie, onSetAction, onSetActiveComponent}}>
+                <div className="left-column">
                     <Outlet/>
-                </SearchContext.Provider>
-                <main>
-                    <nav>
-                        <GenreSelector defaultSelectedGenre={activeGenre?.id || 0} genreList={GenreListArray}
-                                       onSelectGenre={onSelectGenre}/>
-                        <SortControl defaultSelectedSortControl={sortCriterion || 1} SortControl={SortControlArray}
-                                     onSortControl={onSortControl}/>
-                    </nav>
-                    <section>
-                        <MoviesFound defaultMoviesCount={movieListLength}/>
-                        <div data-testid="movie-list" className={styles.moviesFoundResults}>
-                            {movieList.map((movieTile, index) =>
-                                <MovieTile movieTileItem={movieTile} key={index}/>
-                            )}
-                        </div>
-                    </section>
-                </main>
-                <footer>
-                    <Logo/>
-                </footer>
-            </div>
+                    <main>
+                        <nav>
+                            <GenreSelector defaultSelectedGenre={activeGenre?.id || 0} genreList={GenreListArray}
+                                           onSelectGenre={onSelectGenre}/>
+                            <SortControl defaultSelectedSortControl={sortCriterion || 1} SortControl={SortControlArray}
+                                         onSortControl={onSortControl}/>
+                        </nav>
+                        <section>
+                            <MoviesFound defaultMoviesCount={movieListLength}/>
+                            <div data-testid="movie-list" className={styles.moviesFoundResults}>
+                                {movieList.map((movieTile, index) =>
+                                    <MovieTile movieTileItem={movieTile} key={index}/>
+                                )}
+                            </div>
+                        </section>
+                    </main>
+                    <footer>
+                        <Logo/>
+                    </footer>
+                </div>
+
+                <Dialog showModal={showModal} onClose={() => onSetShowModal(false)}>
+                    <SwitchComponents active={activeComponent} action={action}>
+                        <MovieForm name="movie-form" formContent={selectedMovie} action={action}/>
+                        <MovieDelete name="movie-delete" formContent={selectedMovie} action={action}/>
+                        <MovieSuccess name="movie-success" formContent={selectedMovie} action={action} />
+                    </SwitchComponents>
+                </Dialog>
+
+            </SearchContext.Provider>
         </>
     );
 };
