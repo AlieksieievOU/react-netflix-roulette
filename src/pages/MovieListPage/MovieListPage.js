@@ -164,7 +164,7 @@ const MovieListPage = () => {
          */
         searchMovies(params);
 
-    }, [searchQuery, activeGenre, sortCriterion, searchMovies, initDone]);
+    }, [searchQuery, activeGenre, sortCriterion, searchMovies, selectedMovie, initDone]);
 
 
     /**
@@ -174,7 +174,7 @@ const MovieListPage = () => {
 
     return (
         <>
-            <SearchContext.Provider value={{onSearch, isLoading, onSetShowModal, onSetMovie, onSetAction, onSetActiveComponent}}>
+            <SearchContext.Provider value={{onSearch, isLoading, onSetShowModal, onSetMovie, onSetAction, selectedMovie, onSetActiveComponent}}>
                 <div className="left-column">
                     <Outlet/>
                     <main>

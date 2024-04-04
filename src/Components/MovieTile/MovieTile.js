@@ -1,6 +1,6 @@
-import React, {useContext, useState} from "react";
+import React, {useContext, useEffect, useState} from "react";
 import styles from './MovieTile.module.scss';
-import {useNavigate} from 'react-router-dom';
+import {useNavigate, useSearchParams} from 'react-router-dom';
 import {SearchContext} from "../../pages/MovieListPage/MovieListPage";
 
 const MovieTile = (props) => {
@@ -8,27 +8,24 @@ const MovieTile = (props) => {
     const movie = props.movieTileItem;
     const navigate = useNavigate();
     const searchContextValues = useContext(SearchContext);
-
+    const [searchParams , setSearchParams] = useSearchParams();
     const handleTileMenuClick = (event, action) => {
         event.stopPropagation();
-        const queryParams = new URLSearchParams(window.location.search);
+        setShowMenu(false);
 
         if (action === 'delete') {
             searchContextValues.onSetActiveComponent('movie-delete')
         } else {
+            navigate(
+                {
+                    pathname: `/movies/${movie.id}/edit`,
+                    search: searchParams.toString()
+                }
+            )
 
-            const queryParams = new URLSearchParams(window.location.search);
-            let url = `/movies/${movie.id}/edit`;
-
-            if (queryParams.toString() !== '') {
-                url = `/movies/${movie.id}/edit` + "?" + queryParams.toString();
-            }
-
-            navigate(url);
             searchContextValues.onSetActiveComponent('movie-form')
         }
 
-        setShowMenu(false);
         searchContextValues.onSetMovie(movie);
         searchContextValues.onSetAction(action);
         searchContextValues.onSetShowModal(true);
@@ -38,21 +35,22 @@ const MovieTile = (props) => {
     const subMenu = styles.subMenu;
 
     const handleTileClick = () => {
-        const queryParams = new URLSearchParams(window.location.search);
-        let url = `/movies/${movie.id}`;
-
-        if (queryParams.toString() !== '') {
-            url = `/movies/${movie.id}` + "?" + queryParams.toString();
-        }
-
-        navigate(url);
+        navigate(
+            {
+                pathname: `/movies/${movie.id}`,
+                search: searchParams.toString()
+            }
+        )
     };
-
 
     const openMenu = (event) => {
         event.stopPropagation();
         setShowMenu(true);
     }
+
+    useEffect(() => {
+        setSearchParams(new URLSearchParams(window.location.search))
+    }, [searchParams]);
 
     return (
         <div className={styles.movietile} onClick={handleTileClick} role='movie-tile' data-testid="movie-tile">

@@ -1,163 +1,231 @@
-import React, {useState} from 'react';
+import React, {useCallback, useContext, useRef, useState} from 'react';
 import {GenreListArray} from '../../data';
-import { Formik, Form, Field, ErrorMessage } from 'formik';
+import {useFormik} from 'formik';
 import styles from './MovieForm.module.scss';
+import {useNavigate, useSearchParams} from "react-router-dom";
+import {SearchContext} from "../../pages/MovieListPage/MovieListPage";
 
 const MovieForm = ({formContent, action}) => {
-    formContent = action === 'edit' || action === 'delete' ? formContent : {};
-    const [state, setState] = useState({
-        title: formContent?.title ? formContent?.title : '',
-        release_date: formContent?.release_date ? formContent?.release_date : '',
-        vote_average: formContent?.vote_average ? formContent?.vote_average : '',
-        genres: formContent?.genres ? formContent?.genres: [],
-        runtime: formContent?.runtime ? formContent?.runtime : '',
-        overview: formContent?.overview ? formContent?.overview : '',
-        poster_path: formContent?.poster_path ? formContent?.poster_path : '',
-    })
+    const searchContextValues = useContext(SearchContext);
+    const [isLoading, setIsLoading] = useState(false);
+    const [error, setError] = useState(null);
+    const navigate = useNavigate();
+    const [searchParams , setSearchParams] = useSearchParams();
+    const controllerRef = useRef(null);
+    formContent = action === 'edit' ? formContent : {};
+    const validate = values => {
+        const errors = {};
 
-    const handleReset = (event) => {
-        event.preventDefault();
-        setState({
-            title: '',
-            release_date: '',
-            vote_average: '',
-            genres: [],
-            runtime: '',
-            overview: '',
-            poster_path: '',
-        })
-    }
+        if (!values.title) {
+            errors.title = 'Required';
+        }
 
-    const handleSubmit = (event) => {
-        event.preventDefault();
-       // onSubmit(state);
-    }
+        if (!values.release_date) {
+            errors.release_date = 'Required';
+        }
 
-    const handleDateChange = (event) => {
-        setState({ ...state, release_date: event.target.value });
-    }
+        if (!values.genres.length) {
+            errors.genres = 'Select at least one genre to proceed';
+        }
 
-    const handleDateBlur = (event) => {
-        handleDateChange(event);
-    }
+        if (!values.vote_average) {
+            errors.vote_average = 'Required';
+        }
 
-    const handleChangeSelectGenre = (event) => {
-        let options = Array.from(event.target.options);
-        let selected = options
-            .filter(o => o.selected)
-            .map(o => o.value);
+        if (!values.runtime) {
+            errors.runtime = 'Required';
+        }
 
-        setState({ ...state, genre: selected });
-    }
+        if (!values.overview) {
+            errors.overview = 'Required';
+        }
 
-    const handleBlurSelectGenre = (event) => {
-        handleChangeSelectGenre(event);
-    }
-
-    const handleInputChange = (event) => {
-        setState({[event.target.id]: event.target.value });
+        if (!values.poster_path) {
+            errors.poster_path = 'Required';
+        }
+        return errors;
     };
 
-    const handleBlur = (event) => {
-        setState({[event.target.id]: event.target.value });
+    const onSubmit = async (values, actions) => {
+        let clone = Object.assign({}, values);
+
+        if (action === 'add') {
+            delete clone.id;
+        }
+
+        await updateMovie(clone);
     };
+
+    const onReset = async (values, actions) => {
+       await actions.setValues({
+            id: formContent?.id ? formContent?.id : '',
+            title: formContent?.title ? formContent?.title : '',
+            release_date: formContent?.release_date ? formContent?.release_date : '',
+            vote_average: formContent?.vote_average ? formContent?.vote_average : '',
+            genres: formContent?.genres ? formContent?.genres: [],
+            runtime: formContent?.runtime ? formContent?.runtime : '',
+            overview: formContent?.overview ? formContent?.overview : '',
+            poster_path: formContent?.poster_path ? formContent?.poster_path : '',
+        });
+    };
+
+    const {
+        values,
+        errors,
+        touched,
+        isSubmitting,
+        handleBlur,
+        handleChange,
+        handleSubmit,
+        handleReset,
+    } = useFormik({
+        initialValues: {
+            id: formContent?.id ? formContent?.id : '',
+            title: formContent?.title ? formContent?.title : '',
+            release_date: formContent?.release_date ? formContent?.release_date : '',
+            vote_average: formContent?.vote_average ? formContent?.vote_average : '',
+            genres: formContent?.genres ? formContent?.genres: [],
+            runtime: formContent?.runtime ? formContent?.runtime : '',
+            overview: formContent?.overview ? formContent?.overview : '',
+            poster_path: formContent?.poster_path ? formContent?.poster_path : '',
+        },
+        validate,
+        onSubmit,
+        onReset
+    });
 
     const textAreaRow = styles.formRow + " " + styles.textareaRow;
+
+    const updateMovie = useCallback(async (movie) => {
+
+        const url = `http://localhost:4000/movies/`;
+
+        controllerRef.current?.abort();
+        setIsLoading(true);
+        const newController = new AbortController();
+        controllerRef.current = newController;
+        const signal = newController.signal;
+
+        signal.addEventListener("abort", () => {
+            console.log("aborted!")
+        });
+
+        try {
+            const response = await fetch(url , {
+                method:  action === 'add' ? "POST" : "PUT",
+                body: JSON.stringify(movie),
+                headers: {
+                    "Content-type": "application/json; charset=UTF-8",
+                },
+                signal
+            });
+
+            const data = await response.json();
+
+            if (action === 'add') {
+                searchContextValues.onSetActiveComponent('movie-success')
+            } else {
+                searchContextValues.onSetShowModal(false);
+            }
+
+            if (window.location.pathname.indexOf("movies") !== -1) {
+                window.location.reload();
+            }
+
+            navigate(
+                {
+                    pathname: `/movies/${data.id}`,
+                    search: searchParams.toString()
+                }
+            )
+
+        } catch (e) {
+            setError(e.message);
+        } finally {
+            setIsLoading(false);
+            controllerRef.current = null;
+        }
+    }, []);
 
     return (
         <div className={styles.modalContent}>
             {action === 'add' ? (<h2>ADD MOVIE</h2>) : (<h2>EDIT MOVIE</h2>)}
-            <Formik
-                initialValues={state}
-                validate={values => {
-                    const errors = {};
-                    if (!values.email) {
-                        errors.email = 'Required';
-                    } else if (
-                        !/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i.test(values.email)
-                    ) {
-                        errors.email = 'Invalid email address';
-                    }
-                    return errors;
-                }}
-                onSubmit={(values, { setSubmitting }) => {
-                    setTimeout(() => {
-                        alert(JSON.stringify(values, null, 2));
-                        setSubmitting(false);
-                    }, 400);
-                }}
-            >
-                {({
-                      values,
-                      errors,
-                      touched,
-                      handleInputChange,
-                      handleDateChange,
-                      handleBlur,
-                      handleSubmit,
-                      isSubmitting,
-                      /* and other goodies */
-                  }) => (<form onSubmit={handleSubmit} onReset={handleReset}>
+            <form onSubmit={handleSubmit} onReset={handleReset}  autoComplete="off">
                 <div className={styles.formRow}>
                     <div className={styles.formField}>
                         <label htmlFor='title'>TITLE</label>
-                        <input onChange={handleInputChange} onBlur={handleBlur} type="text" value={values.title} placeholder='Movie name' name='title' id='title' />
-                        <div>{errors.title && touched.title && errors.title}</div>
+                        <input value={values.id} type="hidden" id='id'/>
+
+                        <input value={values.title}
+                               onChange={handleChange}
+                               onBlur={handleBlur} type="text"
+                               placeholder='Movie name'
+                               id='title'/>
+                        {errors.title && touched.title && <div className={styles.formFieldErrors}>{errors.title}</div>}
                     </div>
                     <div className={styles.formField}>
                         <label htmlFor='release_date'>RELEASE DATE</label>
-                        <input onChange={handleDateChange} onBlur={handleDateBlur} aria-label="Date" type="text" value={values.release_date} placeholder='Select Date' name='release_date' id='release_date'/>
-                        <div>{errors.release_date && touched.release_date && errors.release_date}</div>
+                        <input value={values.release_date}
+                               onChange={handleChange}
+                               onBlur={handleBlur} aria-label="Date" type="text" placeholder='Select Date' id='release_date'/>
+                        {errors.release_date && touched.release_date && <div className={styles.formFieldErrors}>{errors.release_date}</div>}
                     </div>
                 </div>
                 <div className={styles.formRow}>
                     <div className={styles.formField}>
                         <label htmlFor='poster_path'>POSTER URL</label>
-                        <input onChange={handleInputChange} onBlur={handleBlur} type="text" value={values.poster_path} placeholder='https://' name='poster_path' id='poster_path'/>
-                        <div>{errors.poster_path && touched.poster_path && errors.poster_path}</div>
+                        <input value={values.poster_path}
+                               onChange={handleChange}
+                               onBlur={handleBlur}  type="text" placeholder='https://' id='poster_path'/>
+                        {errors.poster_path && touched.poster_path && <div className={styles.formFieldErrors}>{errors.poster_path}</div>}
                     </div>
 
                     <div className={styles.formField}>
                         <label htmlFor='vote_average'>RATING</label>
-                        <input onChange={handleInputChange} onBlur={handleBlur} type="text" value={values.vote_average} placeholder='IMDB Rating' id='vote_average' name='vote_average'/>
-                        <div>{errors.vote_average && touched.vote_average && errors.vote_average}</div>
+                        <input value={values.vote_average}
+                               onChange={handleChange}
+                               onBlur={handleBlur}  type="number" placeholder='IMDB Rating' id='vote_average'/>
+                        {errors.vote_average && touched.vote_average && <div className={styles.formFieldErrors}>{errors.vote_average}</div>}
                     </div>
                 </div>
 
                 <div className={styles.formRow}>
                     <div className={styles.formField}>
                         <label htmlFor="genres">GENRES</label>
-                        <select onChange={handleChangeSelectGenre} onBlur={handleBlurSelectGenre} value={values.genres}  name="genres" id="genres" multiple>
+                        <select  value={values.genres}
+                                 onChange={handleChange}
+                                 onBlur={handleBlur} id="genres" multiple>
                             {GenreListArray.map(
                                 (genre) => <option data-testid="genre" id={genre.id}
                                                    key={genre.id}>{genre.name}</option>
                             )}
                         </select>
-                        <div>{errors.genres && touched.genres && errors.genres}</div>
+                        {errors.genres && touched.genres && <div className={styles.formFieldErrors}>{errors.genres}</div>}
                     </div>
 
                     <div className={styles.formField}>
                         <label htmlFor='runtime'>RUNTIME</label>
-                        <input onChange={handleInputChange} onBlur={handleBlur}  type="text" value={values.runtime} placeholder='Duration' name='runtime'/>
-                        <div>{errors.runtime && touched.runtime && errors.runtime}</div>
+                        <input value={values.runtime}
+                               onChange={handleChange}
+                               onBlur={handleBlur}   type="number" placeholder='Duration' id='runtime' />
+                        {errors.runtime && touched.runtime && <div className={styles.formFieldErrors}>{errors.runtime}</div>}
                     </div>
                 </div>
 
                 <div className={textAreaRow}>
                     <div className={styles.formField}>
                         <label htmlFor='overview'>OVERVIEW</label>
-                        <textarea onChange={handleInputChange} onBlur={handleBlur} name="overview" id="overview" placeholder='Movie Description'
-                                  value={values.overview}></textarea>
-                        <div>{errors.overview && touched.overview && errors.overview}</div>
+                        <textarea value={values.overview}
+                                       onChange={handleChange}
+                                       onBlur={handleBlur}  id="overview" placeholder='Movie Description'></textarea>
+                        {errors.overview && touched.overview && <div className={styles.formFieldErrors}>{errors.overview}</div>}
                     </div>
                 </div>
                 <div className={styles.buttonsRow}>
-                    <input type="submit" value="Submit"/>
+                    <input type="submit" value="Submit" disabled={isSubmitting}/>
                     <input type="reset" value="Reset"/>
                 </div>
             </form>
-                )}
-            </Formik>
         </div>
     );
 }

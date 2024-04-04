@@ -2,7 +2,6 @@ import React, {useState, useEffect, useCallback, useRef, useContext} from "react
 import styles from './MovieDetails.module.scss';
 import Logo from "../Logo/Logo";
 import {useParams, useNavigate} from "react-router-dom";
-import {SearchContext} from "../../pages/MovieListPage/MovieListPage";
 
 function MovieDetails() {
     const [selectedMovie, setSelectedMovie] = useState({
@@ -15,7 +14,6 @@ function MovieDetails() {
         imageUrl: ""
     });
 
-    const searchContextValues = useContext(SearchContext);
     const [isLoading, setIsLoading] = useState(false);
     const [error, setError] = useState(null);
     const navigate = useNavigate();
