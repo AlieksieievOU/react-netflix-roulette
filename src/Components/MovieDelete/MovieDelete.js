@@ -38,7 +38,7 @@ const MovieDelete = () => {
     }, []);
 
     return (
-        <div className={styles.modalWrapperDelete}>
+        <div data-testid="delete-movie-dialog" className={styles.modalWrapperDelete}>
             <h2>Delete MOVIE</h2>
             <div className={styles.modalText}>
                 Are you sure you want to delete this movie?

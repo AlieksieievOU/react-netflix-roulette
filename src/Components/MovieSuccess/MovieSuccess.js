@@ -4,7 +4,7 @@ const check = process.env.PUBLIC_URL + '/images/check.png';
 
 function MovieSuccess(props) {
     return (
-        <div className={styles.modalWrapperSuccess}>
+        <div data-testid="success-modal" className={styles.modalWrapperSuccess}>
             <div className={styles.modalIcon} >
                 <img src={check} alt="Success" />
             </div>

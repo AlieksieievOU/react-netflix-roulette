@@ -80,7 +80,7 @@ function MovieDetails() {
                                                           onError={(e) => e.target.src = 'https://placehold.co/319x450'}
                                                           src={selectedMovie?.poster_path} alt="imgPoster"/></div>
                 <div>
-                    <div className={styles.nameRow}>{selectedMovie?.title} <span>{selectedMovie?.vote_average}</span>
+                    <div className={styles.nameRow}><span>{selectedMovie?.title}</span> <span>{selectedMovie?.vote_average}</span>
                     </div>
                     <div className={styles.genres}>{selectedMovie?.genres}</div>
                     <div className={styles.releaseDurationRow}>

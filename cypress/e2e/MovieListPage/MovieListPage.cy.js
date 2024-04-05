@@ -49,14 +49,104 @@ context('E2E Test of MovieListPage Component', () => {
     it('should show movie page by clicking on movie tile', () => {
         cy.get('[data-testid="movie-tile"]').first().click();
         cy.wait(1000);
-        cy.location('href').should('include', `/movie/`);
+        cy.location('href').should('include', `/movies/`);
         cy.get('[data-testid="movie-details"]').should('be.visible');
     });
 
     it('should return to search by clicking on search button', () => {
         cy.get('[data-testid="search-button"]').first().click();
         cy.wait(1000);
-        cy.location('href').should('not.include', '/movie');
+        cy.location('href').should('not.include', '/movies');
         cy.get('[data-testid="search-container"]').should('be.visible');
+    });
+
+    it('should show add movie form by clicking on add movie button', () => {
+        cy.get('[data-testid="add-movie"]').first().click();
+        cy.wait(1000);
+        cy.location('href').should('include', '/new');
+        cy.get('[data-testid="movie-form-modal"]').should('be.visible');
+        cy.get('[data-testid="movie-form-modal"]').contains('h2', 'ADD MOVIE')
+    });
+
+    it('should filling and resetting form', () => {
+        cy.get('[data-testid="add-movie"]').first().click();
+        cy.wait(1000);
+        cy.location('href').should('include', '/new');
+        cy.get('[data-testid="movie-form-modal"]').should('be.visible');
+
+        cy.get("#title").type("new movie")
+        cy.get("#release_date").type("1990")
+        cy.get("#vote_average").type("8")
+        cy.get("#genres").select('comedy')
+        cy.get("#runtime").type("120")
+        cy.get("#overview").type("new movie description")
+        cy.get("#poster_path").type("https://upload.wikimedia.org/wikipedia/en/8/8d/FrankDrebin.jpg")
+
+        cy.get('input[type="reset"]').first().click()
+        cy.get("#title").should('be.empty')
+    });
+
+    it('should show not passing validation of genre field', () => {
+        cy.get('[data-testid="add-movie"]').first().click();
+        cy.wait(1000);
+        cy.location('href').should('include', '/new');
+        cy.get('[data-testid="movie-form-modal"]').should('be.visible');
+        cy.get('input[type="submit"]').first().click()
+        cy.get('[data-testid="genre-row"]').contains('div', 'Select at least one genre to proceed')
+    });
+
+    it('should create a new movie by filling and submitting form', () => {
+        cy.get('[data-testid="add-movie"]').first().click();
+        cy.wait(1000);
+        cy.location('href').should('include', '/new');
+        cy.get('[data-testid="movie-form-modal"]').should('be.visible');
+        const movieName = "new movie";
+        cy.get("#title").type(movieName)
+        cy.get("#release_date").type("1990")
+        cy.get("#vote_average").type("8")
+        cy.get("#genres").select('comedy')
+        cy.get("#runtime").type("120")
+        cy.get("#overview").type("new movie description")
+        cy.get("#poster_path").type("https://upload.wikimedia.org/wikipedia/en/8/8d/FrankDrebin.jpg")
+
+        cy.get('input[type="submit"]').first().click()
+        cy.wait(1000);
+        cy.get('[data-testid="success-modal"]').should('be.visible');
+        cy.get('[data-testid="close-dialog"]').first().click();
+
+        cy.location('href').should('include', `/movies/`);
+        cy.get('[data-testid="movie-details"]').should('be.visible');
+        cy.get('[data-testid="movie-details"]').contains('span', movieName)
+    });
+
+    it('should delete movie by clicking on delete button in submenu of movie tile', () => {
+        cy.get('[data-testid="movie-tile"]').first().find('[role="showMenuButton"]').click();
+        cy.get('[data-testid="movie-tile"]').first().find('[role="subMenu"]').should('be.visible');
+        cy.get('[data-testid="movie-tile"]').first().find('[role="subMenu"]').find('ul').contains('li', 'Delete').click()
+        cy.wait(1000);
+        cy.get('[data-testid="delete-movie-dialog"]').should('be.visible');
+        cy.get('[data-testid="delete-movie-dialog"]').find('button').click();
+        cy.wait(1000);
+    });
+
+    it('should edit movie by clicking on edit button in submenu of movie tile', () => {
+        cy.get('[data-testid="movie-tile"]').first().find('[role="showMenuButton"]').click();
+        cy.get('[data-testid="movie-tile"]').first().find('[role="subMenu"]').should('be.visible');
+        cy.get('[data-testid="movie-tile"]').first().find('[role="subMenu"]').find('ul').contains('li', 'Edit').click()
+        cy.wait(1000);
+        cy.wait(1000);
+        cy.location('href').should('include', '/edit');
+        cy.get('[data-testid="movie-form-modal"]').should('be.visible');
+
+        const movieName = "new movie";
+        cy.get("#title").type(movieName)
+        cy.get("#release_date").type("1990")
+        cy.get("#vote_average").type("8")
+        cy.get("#genres").select('comedy')
+        cy.get("#runtime").type("120")
+        cy.get("#overview").type("new movie description")
+        cy.get("#poster_path").type("https://upload.wikimedia.org/wikipedia/en/8/8d/FrankDrebin.jpg")
+
+        cy.get('input[type="submit"]').first().click()
     });
 });

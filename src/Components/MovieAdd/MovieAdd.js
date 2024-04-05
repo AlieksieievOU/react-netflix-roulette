@@ -23,7 +23,7 @@ const MovieAdd = () => {
     };
 
     return (
-        <div className={styles.MovieAddWrapper} onClick={() => handleClick()}>+ add movie</div>
+        <div data-testid="add-movie" className={styles.MovieAddWrapper} onClick={() => handleClick()}>+ add movie</div>
     );
 };
 

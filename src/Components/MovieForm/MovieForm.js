@@ -148,7 +148,7 @@ const MovieForm = ({formContent, action}) => {
     }, []);
 
     return (
-        <div className={styles.modalContent}>
+        <div data-testid="movie-form-modal" className={styles.modalContent}>
             {action === 'add' ? (<h2>ADD MOVIE</h2>) : (<h2>EDIT MOVIE</h2>)}
             <form onSubmit={handleSubmit} onReset={handleReset}  autoComplete="off">
                 <div className={styles.formRow}>
@@ -190,7 +190,7 @@ const MovieForm = ({formContent, action}) => {
                 </div>
 
                 <div className={styles.formRow}>
-                    <div className={styles.formField}>
+                    <div className={styles.formField} data-testid="genre-row">
                         <label htmlFor="genres">GENRES</label>
                         <select  value={values.genres}
                                  onChange={handleChange}

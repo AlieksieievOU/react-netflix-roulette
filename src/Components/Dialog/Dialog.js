@@ -16,7 +16,7 @@ const Dialog = ({action, showModal, onClose, children}) => {
                                 {children}
                             </FocusLock>
                         </div>
-                        <button className={styles.menuButtonClose} onClick={onClose}></button>
+                        <button data-testid="close-dialog" className={styles.menuButtonClose} onClick={onClose}></button>
                     </div>
                 </>
                 , document.getElementById('js-app')
