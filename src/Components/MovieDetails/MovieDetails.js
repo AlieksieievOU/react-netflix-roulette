@@ -1,4 +1,4 @@
-import React, {useState, useEffect, useCallback, useRef, useContext} from "react";
+import React, {useState, useEffect, useCallback, useRef} from "react";
 import styles from './MovieDetails.module.scss';
 import Logo from "../Logo/Logo";
 import {useParams, useNavigate} from "react-router-dom";

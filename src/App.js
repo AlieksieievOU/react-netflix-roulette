@@ -1,7 +1,7 @@
 import React, {StrictMode} from 'react';
 import './App.scss';
 import {MovieListPage} from './pages/MovieListPage/MovieListPage';
-import {createBrowserRouter, RouterProvider, useParams} from "react-router-dom";
+import {createBrowserRouter, RouterProvider} from "react-router-dom";
 import MovieDetails from "./Components/MovieDetails/MovieDetails";
 import ErrorPage from "./pages/ErrorPage/ErrorPage";
 import Header from "./Components/Header/Header";
