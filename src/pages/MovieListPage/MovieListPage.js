@@ -21,6 +21,7 @@ const SearchContext = createContext({
     onSetMovie: {},
     onSetAction: null,
     onSetActiveComponent: null,
+    onDeleteMovie: null,
     selectedMovie: null
 });
 
@@ -37,7 +38,13 @@ const MovieListPage = () => {
     const [showModal, setShowModal] = useState(false);
     const [action, setAction] = useState('edit');
     const [activeComponent, setActiveComponent] = useState("movie-form");
+    const [deletedMovie, setDeletedMovie] = useState(null);
     const navigate = useNavigate();
+
+
+    const onDeleteMovie = (deletedMovie) => {
+        setDeletedMovie(deletedMovie);
+    }
     const onSetActiveComponent = (activeComponent) => {
         setActiveComponent(activeComponent);
     }
@@ -164,7 +171,7 @@ const MovieListPage = () => {
          */
         searchMovies(params);
 
-    }, [searchQuery, activeGenre, sortCriterion, searchMovies, selectedMovie, initDone]);
+    }, [searchQuery, activeGenre, sortCriterion, searchMovies, selectedMovie, deletedMovie, initDone]);
 
 
     /**
@@ -174,7 +181,7 @@ const MovieListPage = () => {
 
     return (
         <>
-            <SearchContext.Provider value={{onSearch, isLoading, onSetShowModal, onSetMovie, onSetAction, selectedMovie, onSetActiveComponent}}>
+            <SearchContext.Provider value={{onSearch, isLoading, onSetShowModal, onSetMovie, onSetAction, selectedMovie, onDeleteMovie, onSetActiveComponent}}>
                 <div className="left-column">
                     <Outlet/>
                     <main>

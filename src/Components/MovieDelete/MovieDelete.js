@@ -26,7 +26,12 @@ const MovieDelete = () => {
 
         try {
             const response = await fetch(url , {method:  'DELETE', signal});
-            const data = await response.json();
+            const status = response.status;
+            if (status === 204) {
+                setIsLoading(false);
+                searchContextValues.onSetShowModal(false);
+                searchContextValues.onDeleteMovie(searchContextValues.selectedMovie.id);
+            }
 
         } catch (e) {
             setError(e.message);
