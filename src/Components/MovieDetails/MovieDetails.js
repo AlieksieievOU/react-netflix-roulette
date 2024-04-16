@@ -13,18 +13,19 @@ function MovieDetails() {
         description: "",
         imageUrl: ""
     });
+
     const [isLoading, setIsLoading] = useState(false);
     const [error, setError] = useState(null);
-    const {movieId} = useParams();
     const navigate = useNavigate();
     const controllerRef = useRef(null);
-    const url = `http://localhost:4000/movies/${movieId}`;
 
-    const fetchMovie = useCallback(async () => {
+
+    const fetchMovie = useCallback(async (movieId) => {
+
+        const url = `http://localhost:4000/movies/${movieId}`;
+
         controllerRef.current?.abort();
-
         setIsLoading(true);
-
         const newController = new AbortController();
         controllerRef.current = newController;
         const signal = newController.signal;
@@ -37,6 +38,7 @@ function MovieDetails() {
             const response = await fetch(url, {
                 signal,
             });
+
             const data = await response.json();
             setSelectedMovie({
                 title: data?.title,
@@ -60,8 +62,10 @@ function MovieDetails() {
         navigate('/');
     };
 
+    let { movieId } = useParams();
+
     useEffect(() => {
-        fetchMovie();
+        fetchMovie(movieId);
     }, [movieId]);
 
     return (
@@ -76,7 +80,7 @@ function MovieDetails() {
                                                           onError={(e) => e.target.src = 'https://placehold.co/319x450'}
                                                           src={selectedMovie?.poster_path} alt="imgPoster"/></div>
                 <div>
-                    <div className={styles.nameRow}>{selectedMovie?.title} <span>{selectedMovie?.vote_average}</span>
+                    <div className={styles.nameRow}><span>{selectedMovie?.title}</span> <span>{selectedMovie?.vote_average}</span>
                     </div>
                     <div className={styles.genres}>{selectedMovie?.genres}</div>
                     <div className={styles.releaseDurationRow}>

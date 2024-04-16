@@ -57,7 +57,7 @@
   max-width: 465px;
 }
 
-.nameRow span {
+.nameRow span:last-child {
   position: absolute;
   height: 60px;
   width: 60px;
