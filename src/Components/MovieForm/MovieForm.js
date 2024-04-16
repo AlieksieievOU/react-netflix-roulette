@@ -5,7 +5,6 @@ import styles from './MovieForm.module.scss';
 import {useNavigate, useSearchParams} from "react-router-dom";
 import {SearchContext} from "../../pages/MovieListPage/MovieListPage";
 import moment from 'moment';
-import MovieTile from "../MovieTile/MovieTile";
 
 const MovieForm = ({formContent, action}) => {
     const searchContextValues = useContext(SearchContext);
@@ -64,13 +63,6 @@ const MovieForm = ({formContent, action}) => {
         await updateMovie(clone);
 
     };
-
-    // const handleSubmit = (values, {
-    //     setSubmitting,
-    //     setFieldError,
-    //     setStatus}) => {
-    //     setFieldError('email', 'email is already used');
-    // }
 
     const onReset = async (values, actions) => {
         await actions.setValues({
@@ -140,7 +132,7 @@ const MovieForm = ({formContent, action}) => {
 
             const data = await response.json();
 
-            if (!data?.messages.length) {
+            if (!data.hasOwnProperty('messages')) {
                 if (action === 'add') {
                     searchContextValues.onSetActiveComponent('movie-success')
                 } else {
