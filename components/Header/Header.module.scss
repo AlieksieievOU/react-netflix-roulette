@@ -1,0 +1,16 @@
+header.top {
+  background: url('../../public/images/header.png') top left no-repeat;
+  min-height: 396px;
+  width: 1200px;
+  display: inline-block;
+  margin-bottom: 10px;
+
+  .topWrapper {
+    padding: 20px 60px;
+    position: relative;
+
+    div {
+      display: inline-block;
+    }
+  }
+}

@@ -1,10 +1,10 @@
-import React, {useContext, useState} from 'react';
+import React, {useContext} from 'react';
 import styles from './MovieAdd.module.scss';
-import {useNavigate} from "react-router-dom";
+//import {useNavigate} from "react-router-dom";
 import {SearchContext} from "../../pages/MovieListPage/MovieListPage";
 
 const MovieAdd = () => {
-    const navigate = useNavigate();
+   // const navigate = useNavigate();
     const searchContextValues = useContext(SearchContext);
 
     const handleClick = () => {
@@ -19,7 +19,7 @@ const MovieAdd = () => {
         searchContextValues.onSetAction('add');
         searchContextValues.onSetShowModal(true);
 
-        navigate(url);
+      //  navigate(url);
     };
 
     return (

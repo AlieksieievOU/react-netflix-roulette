@@ -1,14 +1,14 @@
 import React, {useContext, useEffect, useState} from "react";
 import styles from './MovieTile.module.scss';
-import {useNavigate, useSearchParams} from 'react-router-dom';
+//import {useNavigate, useSearchParams} from 'react-router-dom';
 import {SearchContext} from "../../pages/MovieListPage/MovieListPage";
 
 const MovieTile = (props) => {
     const [showMenu, setShowMenu] = useState(false);
     const movie = props.movieTileItem;
-    const navigate = useNavigate();
+   // const navigate = useNavigate();
     const searchContextValues = useContext(SearchContext);
-    const [searchParams , setSearchParams] = useSearchParams();
+ //   const [searchParams , setSearchParams] = useSearchParams();
     const handleTileMenuClick = (event, action) => {
         event.stopPropagation();
         setShowMenu(false);
@@ -16,12 +16,12 @@ const MovieTile = (props) => {
         if (action === 'delete') {
             searchContextValues.onSetActiveComponent('movie-delete')
         } else {
-            navigate(
-                {
-                    pathname: `/movies/${movie.id}/edit`,
-                    search: searchParams.toString()
-                }
-            )
+            // navigate(
+            //     {
+            //         pathname: `/movies/${movie.id}/edit`,
+            //         search: searchParams.toString()
+            //     }
+            // )
 
             searchContextValues.onSetActiveComponent('movie-form')
         }
@@ -35,12 +35,12 @@ const MovieTile = (props) => {
     const subMenu = styles.subMenu;
 
     const handleTileClick = () => {
-        navigate(
-            {
-                pathname: `/movies/${movie.id}`,
-                search: searchParams.toString()
-            }
-        )
+        // navigate(
+        //     {
+        //         pathname: `/movies/${movie.id}`,
+        //         search: searchParams.toString()
+        //     }
+        // )
     };
 
     const openMenu = (event) => {
@@ -48,15 +48,15 @@ const MovieTile = (props) => {
         setShowMenu(true);
     }
 
-    useEffect(() => {
-        setSearchParams(new URLSearchParams(window.location.search))
-    }, [searchParams]);
-
+    // useEffect(() => {
+    //     setSearchParams(new URLSearchParams(window.location.search))
+    // }, [searchParams]);
+    const [src, setSrc] = React.useState("" + movie.poster_path);
     return (
         <div className={styles.movietile} onClick={handleTileClick} role='movie-tile' data-testid="movie-tile">
             <div className={styles.movietileImage}>
-                <img src={movie?.poster_path} alt={movie?.title}
-                     onError={(e) => e.target.src = 'https://placehold.co/319x450'}/>
+                <img className={'img'} src={src} alt={movie?.title}
+                     onError={() => setSrc('https://placehold.co/319x450')}/>
                 <button role="showMenuButton" className={styles.menuButton}
                         onClick={(event) => openMenu(event)}></button>
             </div>

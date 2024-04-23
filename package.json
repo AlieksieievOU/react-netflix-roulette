@@ -12,12 +12,12 @@
     "prettier": "^3.2.5",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
-    "react-scripts": "5.0.1",
     "web-vitals": "^2.1.4"
   },
   "scripts": {
-    "start": "react-scripts start",
-    "build": "react-scripts build",
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
     "coverage": "react-scripts test --coverage --watchAll",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
@@ -58,6 +58,7 @@
     "cypress": "^13.7.1",
     "eslint-plugin-react-hooks": "^4.6.0",
     "eslint-plugin-storybook": "^0.8.0",
+    "next": "^14.2.1",
     "normalize.css": "^8.0.1",
     "prop-types": "^15.8.1",
     "react-focus-lock": "^2.11.2",

@@ -1,0 +1,55 @@
+.overlay {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  left: 0;
+  top: 0;
+  background: rgba(35, 35, 35, 0.918051);
+  mix-blend-mode: normal;
+  opacity: 0.89;
+  backdrop-filter: blur(12.2323px);
+  z-index: 11;
+}
+
+.modalWrapperParent {
+  position: relative;
+}
+
+.modalWrapper {
+  padding: 60px;
+  display: block;
+  background: #232323;
+  max-width: 976px;
+  z-index: 12;
+  position: absolute;
+  width: 100%;
+  left: 50%;
+  transform: translateX(-488px);
+  top: 229px;
+  box-shadow: 0px 10px 50px 0px rgba(0, 0, 0, 0.05);
+}
+
+.modalWrapper h2 {
+  font-style: normal;
+  font-weight: 300;
+  font-size: 40px;
+  line-height: 49px;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  color: #FFFFFF;
+  padding-bottom: 38px;
+}
+
+.menuButtonClose {
+  background: url('./../../public/images/close-button.png') top left no-repeat;
+  height: 23px;
+  width: 23px;
+  position: absolute;
+  top: 30px;
+  right: 30px;
+  margin: 0;
+  border: 0;
+  padding: 0;
+  cursor: pointer;
+}
+

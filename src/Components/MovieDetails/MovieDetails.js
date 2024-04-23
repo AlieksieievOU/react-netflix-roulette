@@ -1,7 +1,8 @@
+"use client"
 import React, {useState, useEffect, useCallback, useRef} from "react";
 import styles from './MovieDetails.module.scss';
 import Logo from "../Logo/Logo";
-import {useParams, useNavigate} from "react-router-dom";
+//import {useParams, useNavigate} from "react-router-dom";
 
 function MovieDetails() {
     const [selectedMovie, setSelectedMovie] = useState({
@@ -16,7 +17,7 @@ function MovieDetails() {
 
     const [isLoading, setIsLoading] = useState(false);
     const [error, setError] = useState(null);
-    const navigate = useNavigate();
+  //  const navigate = useNavigate();
     const controllerRef = useRef(null);
 
 
@@ -59,10 +60,10 @@ function MovieDetails() {
     }, []);
 
     const searchButtonClick = () => {
-        navigate('/');
+    //    navigate('/');
     };
 
-    let { movieId } = useParams();
+   // let { movieId } = useParams();
 
     useEffect(() => {
         fetchMovie(movieId);
@@ -76,7 +77,7 @@ function MovieDetails() {
             </div>
 
             <div data-testid="movie-details" className={styles.movieInfoPanel}>
-                <div className={styles.movieInfoImg}><img data-testid="imgPoster"
+                <div className={styles.movieInfoImg}><img className={'img'} data-testid="imgPoster"
                                                           onError={(e) => e.target.src = 'https://placehold.co/319x450'}
                                                           src={selectedMovie?.poster_path} alt="imgPoster"/></div>
                 <div>

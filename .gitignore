@@ -9,6 +9,11 @@
 /coverage
 /storybook-static
 
+# next.js
+.next
+next-env.d.ts
+dist
+
 # production
 /build
 

@@ -1,9 +1,9 @@
-main {
+main.main {
   background: #232323;
   padding: 20px 60px;
 }
 
-nav {
+nav.navigation {
   position: relative;
   overflow: hidden;
   display: flex;
@@ -38,12 +38,12 @@ aside {
 
 }
 
-h2 {
+h2.h2 {
   margin: 0;
   padding: 0;
 }
 
-img {
+img.img {
   max-width: 100%;
 }
 
@@ -55,7 +55,7 @@ img {
   padding-bottom: 60px;
 }
 
-footer {
+footer.footer {
   background: #424242;
   height: 70px;
   line-height: 70px;
