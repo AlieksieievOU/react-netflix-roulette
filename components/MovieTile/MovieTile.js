@@ -4,7 +4,6 @@ import { useRouter } from 'next/navigation'
 import styles from './MovieTile.module.scss';
 import Image from "next/image";
 import Link from "next/link";
-import {auto} from "../../storybook-static/sb-manager/chunk-CXYKRFSY";
 //import {useNavigate, useSearchParams} from 'react-router-dom';
 //import {SearchContext} from "../MovieListPage/MovieListPage";
 
