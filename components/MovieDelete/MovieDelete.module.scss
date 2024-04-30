@@ -1,0 +1,46 @@
+.modalWrapperDelete h2 {
+  font-style: normal;
+  font-weight: 300;
+  font-size: 40px;
+  line-height: 49px;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  color: #FFFFFF;
+  padding-bottom: 38px;
+}
+
+.modalText {
+  font-style: normal;
+  font-weight: 400;
+  font-size: 20px;
+  line-height: 24px;
+  text-align: center;
+  color: #FFFFFF;
+  padding-bottom: 52px;
+}
+
+.modalButtonWrapper {
+  button {
+    display: inline-block;
+    text-transform: uppercase;
+    width: 180px;
+    height: 57px;
+    background: rgba(246, 82, 97, 1);
+    border-radius: 4px;
+    font-style: normal;
+    font-weight: 500;
+    font-size: 20px;
+    line-height: 24px;
+    text-align: center;
+    color: #FFFFFF;
+    border: 0;
+    cursor: pointer;
+    transition: all .3s ease-in;
+    float: right;
+    margin-left: 13px;
+
+    &:hover {
+      background: rgba(246, 82, 97, 0.68);
+    }
+  }
+}

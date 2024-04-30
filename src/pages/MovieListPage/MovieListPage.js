@@ -1,3 +1,4 @@
+"use client"
 import React, {useState, useEffect, useCallback, useRef, createContext} from "react";
 import styles from './MovieListPage.module.scss';
 import GenreSelector from '../../Components/GenreSelector/GenreSelector';
@@ -5,7 +6,7 @@ import SortControl from '../../Components/SortControl/SortControl';
 import MoviesFound from '../../Components/MoviesFound/MoviesFound';
 import MovieTile from '../../Components/MovieTile/MovieTile';
 import Logo from '../../Components/Logo/Logo';
-import {Outlet, useNavigate, useSearchParams} from "react-router-dom";
+//import {Outlet, useNavigate, useSearchParams} from "react-router-dom";
 import {GenreListArray, SortControlArray} from '../../data';
 import Dialog from "../../Components/Dialog/Dialog";
 import SwitchComponents from "../../Components/SwitchComponents/SwitchComponents";
@@ -39,7 +40,7 @@ const MovieListPage = () => {
     const [action, setAction] = useState('edit');
     const [activeComponent, setActiveComponent] = useState("movie-form");
     const [deletedMovie, setDeletedMovie] = useState(null);
-    const navigate = useNavigate();
+   // const navigate = useNavigate();
 
 
     const onDeleteMovie = (deletedMovie) => {
@@ -183,9 +184,9 @@ const MovieListPage = () => {
         <>
             <SearchContext.Provider value={{onSearch, isLoading, onSetShowModal, onSetMovie, onSetAction, selectedMovie, onDeleteMovie, onSetActiveComponent}}>
                 <div className="left-column">
-                    <Outlet/>
-                    <main>
-                        <nav>
+                    {/*<Outlet/>*/}
+                    <main className={styles.main}>
+                        <nav className={styles.navigation}>
                             <GenreSelector defaultSelectedGenre={activeGenre?.id || 0} genreList={GenreListArray}
                                            onSelectGenre={onSelectGenre}/>
                             <SortControl defaultSelectedSortControl={sortCriterion || 1} SortControl={SortControlArray}
@@ -200,7 +201,7 @@ const MovieListPage = () => {
                             </div>
                         </section>
                     </main>
-                    <footer>
+                    <footer className={styles.footer}>
                         <Logo/>
                     </footer>
                 </div>

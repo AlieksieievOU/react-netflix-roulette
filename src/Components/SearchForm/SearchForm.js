@@ -1,3 +1,4 @@
+"use client"
 import React, {useState, useContext, useEffect} from 'react';
 import {SearchContext} from '../../pages/MovieListPage/MovieListPage';
 import styles from './SearchForm.module.scss';
@@ -36,7 +37,7 @@ const SearchForm = () => {
 
     return (
         <div className={styles.searchFormContainer} data-testid="search-container">
-            <h2>{title}</h2>
+            <h2 className={'h2'}>{title}</h2>
             <form onSubmit={handleFormSubmit}>
                 <input
                     placeholder={inputPlaceholder}
